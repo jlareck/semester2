@@ -276,7 +276,7 @@ void interactiveList()
             case 5:{
                 if (!checkIfCreatedList)
                 {
-                    cout << "Error! You didn't create a list. Create a list and add some elements in it"<<endl;
+                    cout << "Error! You didn't create a list. Create a list and add minimum one element"<<endl;
                 }
                else if(countNodes(list)==0) {
                     cout << "Error! There is no elements in list"<<endl;
@@ -301,108 +301,222 @@ void interactiveList()
         }
     }
 }
-void addToEmptyVector(vector<int>& vec, int value)
-{
-    vec.push_back(value);
-}
 
-void addElementInVector(vector<int>& vec, int index, int value)
+void addElementInVector(vector<Point>& vec, int index, Point value)
 {
-    index=(index-1)%vec.size();
-    vec.insert(vec.begin()+index, value);
+    if (vec.size()==0)
+    {
+        vec.push_back(value);
+    }
+    else{
+    
+        index=(index-1)%vec.size();
+        cout<< vec.size()<< " " << index<<endl;
+        vec.insert(vec.begin()+index, value);
+    }
 }
-void deleteElement(vector<int>& vec, int index)
+void deleteElement(vector<Point>& vec, int index)
 {
     index=index%vec.size();
     vec.erase(vec.begin() + index);
 }
-void getFromVector(vector<int> vec, int index)
+void getValue(vector<Point> vec, int index)
 {
      index=index%vec.size();
-    cout << vec[index]<<endl;
+     cout << vec[index].x<< " "<< vec[index].y<< " "<<vec[index].z<<endl;
 }
-void printVector(vector<int> vec)
+void setValue(vector<Point>& vec)
 {
+    cout << "Enter the index of element which you want to set value"<<endl;
+    int index;
+    cin>> index;
+    index=index%vec.size();
+    cout << "Enter data.x: "<<endl;
+    Point data;
+    cin >> data.x;
+    cout << "Enter data.y: "<<endl;
+    cin >> data.y;
+    cout << "Enter data.z: "<<endl;
+    cin >> data.z;
+    vec[index] = data;
+}
+void printAllElementsInVector(vector<Point> vec)
+{
+    cout << "All elements"<<endl;
     for (int i = 0; i<vec.size(); i++)
     {
-        cout << vec[i]<<endl;
+        cout << vec[i].x<< " "<< vec[i].y<< " "<< vec[i].z<<endl;
     }
 }
-void circularVector()
-{
-    vector<int> circularList;
-    addToEmptyVector(circularList, 3);
-    addElementInVector(circularList, 2, 2);
-    addElementInVector(circularList, 1, 1);
-    printVector(circularList);
-}
 
-
-
-void addToEmptyArray(Point value, Point arr[])
+void interactiveVector()
 {
-    arr[0] = value;
-}
-void addToEmptyArray(int value, int arr[])
-{
-    arr[0] = value;
-}
-int getNumberOfElements(int arr[])
-{
-    int i = 0;
-    while(arr[i]!=NULL)
-    {
-        i++;
+    int action;
+    bool checkIfCreatedList = false, loopFlag = true;
+    vector<Point> list;
+    while(loopFlag){
+        cout << "Actions" << endl;
+        cout << 1 << " - Create empty"<<endl;
+        cout << 2 << " - Add element before key element"<<endl;
+        cout << 3 << " - Delete element by key" <<endl;
+        cout << 4 << " - Get element" << endl;
+        cout << 5 << " - Set element" <<endl;
+        cout << 6 << " - Print all elements" <<endl;
+        cout << "Press any other key to exit"<<endl;
+        cout << endl;
+        cout << "Enter action"<<endl;
+        cin >> action;
+        switch(action){
+            case 1:{
+                if (!checkIfCreatedList)
+                {
+                    
+                    checkIfCreatedList = true;
+                    cout << "The list was created sucsesfully"<<endl;
+                }
+                else
+                    cout << "You have already created circular list"<<endl;
+                break;
+            }
+            case 2:{
+                if (checkIfCreatedList)
+                {
+                    cout << "Enter index before you want to add element"<<endl;
+                    int index;
+                    
+                    cin>>index;
+                    cout << "Enter value"<<endl;
+                    Point value;
+                    value.enterCoord();
+                    addElementInVector(list, index, value);
+                }
+                else
+                    cout << "Error! Firstly you need to create a list"<<endl;
+                break;
+            }
+            case 3:{
+                if (!checkIfCreatedList) {
+                    cout << "You didn't create a list, you need to create and add elements to it if you want to use this function"<<endl;
+                }
+                else if (list.size()==0)
+                    cout << "Error! There is no elements to delete. You need to add some elements in list"<<endl;
+                else {
+                    cout << "Enter the index of element that you want to delete" <<endl;
+                    int index;
+                    cin >> index;
+                    deleteElement(list, index);
+                }
+                break;
+            }
+            case 4:{
+                if (!checkIfCreatedList)
+                {
+                    cout << "Error. You need to create list and add elements in it if you want to use this option"<<endl;
+                }
+                else if (list.size()==0) {
+                    cout << "Error! There is no elements in list. You need to add minimum one element if you want to use this case"<<endl;
+                }
+                else{
+                    cout << "Enter the index of element that you want to get"<<endl;
+                    int index;
+                    cin>> index;
+                    cout << "Element "<< index<<endl;
+                    getValue(list, index);
+                }
+                break;
+            }
+            case 5:{
+                if (!checkIfCreatedList)
+                {
+                    cout << "Error! You didn't create a list. Create a list and add minimum one element"<<endl;
+                }
+                else if(list.size()==0) {
+                    cout << "Error! There is no elements in list"<<endl;
+                }
+                else{
+                    setValue(list);
+                }
+                break;
+            }
+            case 6:{
+                printAllElementsInVector(list);
+                break;
+            }
+            default:
+                loopFlag = false;
+                cout << "Good bye!"<<endl;
+                break;
+        }
     }
-    return i;
 }
-void deleteElement(int arr[], int index, const int size)
+
+//void addToEmptyArray(Point value, Point arr[])
+//{
+//    arr[0] = value;
+//}
+
+void deleteElement(int arr[], int index, const int size, int& currentSize)
 {
-    int n = getNumberOfElements(arr);
+    int n = currentSize;
     for (int i = index; i<n; i++)
     {
         arr[i]=arr[i+1];
     }
+    currentSize--;
 }
-void pushBeforeKeyElement(int value, int arr[], int index)
+void pushBeforeKeyElement(int value, int arr[], int index, int& currentSize)
 {
-    int i;
-    i=(index-1)%getNumberOfElements(arr);
-    int temp = arr[i];
-    arr[i] = value;
-    int k;
-    while(arr[i]!=NULL)
+    if (currentSize==0)
     {
-        i++;
-        k = arr[i];
-        arr[i] = temp;
-        temp = k;
+        arr[0] = value;
     }
+    else{
+        if (index == 0)
+        {
+            index++;
+        }
+        unsigned int n = currentSize;
+        index=(index-1)%n;
+        cout<< currentSize<< " " << index<<endl;
+        int temp = arr[index];
+        arr[index] = value;
+        int k;
+        while(index<=currentSize)
+        {
+            index++;
+            k = arr[index];
+            arr[index] = temp;
+            temp = k;
+        }
+    }
+    currentSize++;
 }
-void set(int index, int arr[], int value)
+void set(int index, int arr[], int value,int currentSize)
 {
-    int n = getNumberOfElements(arr);
-    index = index%n;
+    index = index%currentSize;
     arr[index] = value;
 }
-void get(int index, int arr[])
+void get(int index, int arr[], int currentSize)
 {
-    int n = getNumberOfElements(arr);
-    index = index%n;
+    index = index%currentSize;
     cout << arr[index]<<endl;
 }
-void printArray(int arr[])
+void printArray(int arr[], const int size, int currentSize)
 {
     int i = 0;
-    while (arr[i]!=NULL)
+    while (i<currentSize)
     {
         cout<< i<< ": " << arr[i]<<endl;
         i++;
     }
 }
 void circularArray(){
-    const int size = 100;
+    const int size = 8;
     int arr[size];
+    for (int i =0; i<size; i++)
+    {
+        arr[i] = 0;
+    }
 //    addToEmptyArray(12, arr);
 ////    int i = 0;
 ////    int a = getNumberOfElements(arr);
@@ -416,13 +530,44 @@ void circularArray(){
 //    cout << "-----"<<endl;
 //    printArray(arr);
 //    pushBeforeKeyElement(25, arr, 3);
-    addToEmptyArray(3, arr);
-    pushBeforeKeyElement(2, arr, 2);
-    pushBeforeKeyElement(1, arr, 1);
-    printArray(arr);
+    
+    int currentSize = 0;
+    pushBeforeKeyElement(2, arr, 2, currentSize);
+    pushBeforeKeyElement(3, arr, 0, currentSize);
+    pushBeforeKeyElement(6, arr, 1, currentSize);
+    pushBeforeKeyElement(10, arr, 2, currentSize);
+    pushBeforeKeyElement(1, arr, 3, currentSize);
+    pushBeforeKeyElement(1222, arr, -1, currentSize);
+    printArray(arr, size, currentSize);
+    vector<Point> vec;
+    Point point;
+    point.x = 2;
+    point.y = 0;
+    point.z = 0;
+    cout <<endl;
+    addElementInVector(vec, 2, point);
+    point.x = 3;
+    addElementInVector(vec, 0, point);
+    point.x = 6;
+    addElementInVector(vec, 1, point);
+    point.x = 10;
+    addElementInVector(vec, 2, point);
+    point.x = 1;
+    addElementInVector(vec, 3, point);
+    point.x = 122;
+    addElementInVector(vec, -1, point);
+    printAllElementsInVector(vec);
+//    pushBeforeKeyElement(5, array, 1);
+//    pushBeforeKeyElement(6, array, 1);
+//    pushBeforeKeyElement(7, array, 1);
+    
+  //  deleteElement(array, 1, size);
+  //  printArray(array,size);
 }
+
 int main()
 {
-    interactiveList();
+  //  cout << 12%5<<endl;
+    circularArray();
     return 0;
 }
