@@ -311,13 +311,17 @@ void addElementInVector(vector<Point>& vec, int index, Point value)
     else{
     
         index=(index-1)%vec.size();
-        cout<< vec.size()<< " " << index<<endl;
+       //index = vec.size()-index;
+        
         vec.insert(vec.begin()+index, value);
     }
 }
 void deleteElement(vector<Point>& vec, int index)
 {
-    index=index%vec.size();
+    //cout << "Index " << index<<endl;
+    index=(index-1)%vec.size();
+    cout << "Index " << index<<"Size"<< vec.size() <<endl;
+  //  index = vec.size()-index;
     vec.erase(vec.begin() + index);
 }
 void getValue(vector<Point> vec, int index)
@@ -457,7 +461,11 @@ void interactiveVector()
 
 void deleteElement(int arr[], int index, const int size, int& currentSize)
 {
-    int n = currentSize;
+    size_t n = currentSize;
+    
+    
+    index=(index-1)%n;
+    cout << index << endl;
     for (int i = index; i<n; i++)
     {
         arr[i]=arr[i+1];
@@ -477,7 +485,7 @@ void pushBeforeKeyElement(int value, int arr[], int index, int& currentSize)
         }
         unsigned int n = currentSize;
         index=(index-1)%n;
-        cout<< currentSize<< " " << index<<endl;
+        
         int temp = arr[index];
         arr[index] = value;
         int k;
@@ -493,12 +501,14 @@ void pushBeforeKeyElement(int value, int arr[], int index, int& currentSize)
 }
 void set(int index, int arr[], int value,int currentSize)
 {
-    index = index%currentSize;
+    unsigned int n = currentSize;
+    index=index%n;
     arr[index] = value;
 }
 void get(int index, int arr[], int currentSize)
 {
-    index = index%currentSize;
+    unsigned int n = currentSize;
+    index=index%n;
     cout << arr[index]<<endl;
 }
 void printArray(int arr[], const int size, int currentSize)
@@ -537,7 +547,10 @@ void circularArray(){
     pushBeforeKeyElement(6, arr, 1, currentSize);
     pushBeforeKeyElement(10, arr, 2, currentSize);
     pushBeforeKeyElement(1, arr, 3, currentSize);
-    pushBeforeKeyElement(1222, arr, -1, currentSize);
+    pushBeforeKeyElement(1222, arr, -2, currentSize);
+    pushBeforeKeyElement(1000, arr, -1, currentSize);
+    printArray(arr, size, currentSize);
+    deleteElement(arr, -2, size, currentSize);
     printArray(arr, size, currentSize);
     vector<Point> vec;
     Point point;
@@ -555,7 +568,12 @@ void circularArray(){
     point.x = 1;
     addElementInVector(vec, 3, point);
     point.x = 122;
+    addElementInVector(vec, -2, point);
+    point.x = 1000;
     addElementInVector(vec, -1, point);
+    cout << "----------"<<endl;
+    printAllElementsInVector(vec);
+    deleteElement(vec, -4);
     printAllElementsInVector(vec);
 //    pushBeforeKeyElement(5, array, 1);
 //    pushBeforeKeyElement(6, array, 1);
