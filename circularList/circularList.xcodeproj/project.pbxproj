@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1E21FE8D222EAE5600A838A0 /* interactiveList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1E21FE8B222EAE5600A838A0 /* interactiveList.cpp */; };
+		1E21FE90222EC95500A838A0 /* pointstructure.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1E21FE8E222EC95500A838A0 /* pointstructure.cpp */; };
+		1E21FE93222F239600A838A0 /* interactiveVector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1E21FE91222F239600A838A0 /* interactiveVector.cpp */; };
+		1E21FE96222F263400A838A0 /* interactiveArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1E21FE94222F263400A838A0 /* interactiveArray.cpp */; };
 		1E5C2ED4221EF26F001A4DB0 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1E5C2ED3221EF26F001A4DB0 /* main.cpp */; };
 /* End PBXBuildFile section */
 
@@ -23,6 +27,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1E21FE8B222EAE5600A838A0 /* interactiveList.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = interactiveList.cpp; sourceTree = "<group>"; };
+		1E21FE8C222EAE5600A838A0 /* interactiveList.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = interactiveList.hpp; sourceTree = "<group>"; };
+		1E21FE8E222EC95500A838A0 /* pointstructure.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = pointstructure.cpp; sourceTree = "<group>"; };
+		1E21FE8F222EC95500A838A0 /* pointstructure.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = pointstructure.hpp; sourceTree = "<group>"; };
+		1E21FE91222F239600A838A0 /* interactiveVector.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = interactiveVector.cpp; sourceTree = "<group>"; };
+		1E21FE92222F239600A838A0 /* interactiveVector.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = interactiveVector.hpp; sourceTree = "<group>"; };
+		1E21FE94222F263400A838A0 /* interactiveArray.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = interactiveArray.cpp; sourceTree = "<group>"; };
+		1E21FE95222F263400A838A0 /* interactiveArray.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = interactiveArray.hpp; sourceTree = "<group>"; };
 		1E5C2ED0221EF26F001A4DB0 /* circularList */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = circularList; sourceTree = BUILT_PRODUCTS_DIR; };
 		1E5C2ED3221EF26F001A4DB0 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -58,6 +70,14 @@
 			isa = PBXGroup;
 			children = (
 				1E5C2ED3221EF26F001A4DB0 /* main.cpp */,
+				1E21FE8B222EAE5600A838A0 /* interactiveList.cpp */,
+				1E21FE8C222EAE5600A838A0 /* interactiveList.hpp */,
+				1E21FE8E222EC95500A838A0 /* pointstructure.cpp */,
+				1E21FE8F222EC95500A838A0 /* pointstructure.hpp */,
+				1E21FE91222F239600A838A0 /* interactiveVector.cpp */,
+				1E21FE92222F239600A838A0 /* interactiveVector.hpp */,
+				1E21FE94222F263400A838A0 /* interactiveArray.cpp */,
+				1E21FE95222F263400A838A0 /* interactiveArray.hpp */,
 			);
 			path = circularList;
 			sourceTree = "<group>";
@@ -118,7 +138,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1E21FE96222F263400A838A0 /* interactiveArray.cpp in Sources */,
+				1E21FE90222EC95500A838A0 /* pointstructure.cpp in Sources */,
+				1E21FE8D222EAE5600A838A0 /* interactiveList.cpp in Sources */,
 				1E5C2ED4221EF26F001A4DB0 /* main.cpp in Sources */,
+				1E21FE93222F239600A838A0 /* interactiveVector.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
