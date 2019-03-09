@@ -20,11 +20,12 @@ struct List{
 };
 List* addToEmpty(Point );
 int countNodes(List* );
-List* pushBeforeIndex(List* , int , Point );
-void deleteNode(List* , int );
+List* addElement(List* , int , Point );
+List* deleteElement(List* , int );
 void getValue(int , List* );
 void setValue(int , List* );
 void printCircularList(List *);
 void interactiveList();
 void demoList();
+void benchmark();
 #endif /* interactiveList_hpp */

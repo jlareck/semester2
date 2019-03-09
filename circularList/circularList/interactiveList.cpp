@@ -24,13 +24,13 @@ int countNodes(List* head)
         do {
             temp = temp->next;
             result++;
-        } while (temp != head);
+        } while (temp->next != head);
     }
     
     return result;
 }
 
-List* pushBeforeIndex(List* list, int index, Point value)
+List* addElement(List* list, int index, Point value)
 {
     if (countNodes(list)==0)
     {
@@ -38,13 +38,21 @@ List* pushBeforeIndex(List* list, int index, Point value)
     }
     else{
         List* node = new List, *prevNode;
+        
         List* p = list->next;
+        
         prevNode = list;
         int numberOfNodes = countNodes(list);
-        if (index>=numberOfNodes)
+        index = index%numberOfNodes;
+        if (index<0)
         {
+            index=abs(index);
             index = index%numberOfNodes;
+            index = numberOfNodes-index;
         }
+        else
+            index = (index)%numberOfNodes;
+        
         do{
             if (p->index == index)
             {
@@ -66,24 +74,39 @@ List* pushBeforeIndex(List* list, int index, Point value)
     }
     return list;
 }
-void deleteNode(List* list, int index)
+List* deleteElement(List* list, int index)
 {
     List* node = list, *prevNode;
-    int n = countNodes(list);
-    index = index%n;
-    do {
-        prevNode=node;
-        node=node->next;
-    }while(node->index!=index);
-    prevNode->next = node->next;
-    free(node);
-    List* currNode = node->next;
-    do
+
+    int numberOfNodes = countNodes(list);
+    if (index<0)
     {
-        currNode->index--;
-        currNode = currNode->next;
-    }while(currNode!=list->next);
-    
+        index=abs(index-1);
+        index = index%numberOfNodes;
+        index = numberOfNodes-index;
+    }
+    else
+        index = index%numberOfNodes;
+    if(node->next==list)
+    {
+        list = nullptr;
+        node = nullptr;
+    }
+    else{
+        do {
+            prevNode=node;
+            node=node->next;
+        }while(node->index!=index);
+        prevNode->next = node->next;
+        // free(node);
+        List* currNode = node->next;
+        do
+        {
+            currNode->index--;
+            currNode = currNode->next;
+        }while(currNode!=list->next);
+    }
+    return list;
 }
 void getValue(int index, List* list)
 {
@@ -139,7 +162,7 @@ void printCircularList(List *list)
     p = list -> next;
     do
     {
-        cout << p->data.x << " "<< p->data.y<< " "<<p->data.z<<endl;;
+        cout << p->index<< ":"<< p->data.x << " "<< p->data.y<< " "<<p->data.z<<endl;;
         p = p -> next;
         
     }while(p != list->next);
@@ -185,7 +208,7 @@ void interactiveList()
                     cout << "Enter value"<<endl;
                     Point value;
                     value.enterCoord();
-                    list = pushBeforeIndex(list, index, value);
+                    list = addElement(list, index, value);
                 }
                 else
                     cout << "Error! Firstly you need to create a list"<<endl;
@@ -202,7 +225,7 @@ void interactiveList()
                     cout << "Enter the index of element that you want to delete" <<endl;
                     int index;
                     cin >> index;
-                    deleteNode(list, index);
+                   list =  deleteElement(list, index);
                 }
                 break;
             }
@@ -262,31 +285,31 @@ void demoList()
     value.x = 0;
     value.y = 0;
     value.z = 0;
-    list = pushBeforeIndex(list, 0, value);
+    list = addElement(list, 0, value);
     printCircularList(list);
     cout << "Added first point to list with x,y,z coordinates 0"<<endl;
     cout<< "Now we can add the point before zero index for example with x,y,z coordinates 1"<<endl;
     value.x = 1;
     value.y = 1;
     value.z = 1;
-    pushBeforeIndex(list, 0, value);
+    addElement(list, 0, value);
     printCircularList(list);
     cout<< "Let's add the point before first index for example with x,y,z coordinates 2"<<endl;
     value.x = 2;
     value.y = 2;
     value.z = 2;
-    pushBeforeIndex(list, 1, value);
+    addElement(list, 1, value);
     cout << "That is how our list look like"<<endl;
     printCircularList(list);
     cout << "As this list is circular, you can enter any index that you want to push the point before. For example you want to add the element befor index 5, if you have three unique points it will add the point after going loop and add it before element with index 3"<<endl;
     value.x = 5;
     value.y = 5;
     value.z = 5;
-    pushBeforeIndex(list, 5, value);
+    addElement(list, 5, value);
     cout << "That is how our list look like"<<endl;
     printCircularList(list);
     cout << "So, now we can delete the point in list. Let's delete point wit index 0"<<endl;
-    deleteNode(list, 1);
+    list = deleteElement(list, 0);
     cout << "That is how our list look like"<<endl;
     printCircularList(list);
     cout << "You can also change any value by index. Let's change element with index 1, by setting x,y,z coordinates 7. That is how element look like before changing"<<endl;
@@ -299,4 +322,45 @@ void demoList()
     getValue(1, list);
     cout << "That is how our list look like"<<endl;
     printCircularList(list);
+}
+void benchmark()
+{
+    List* list = nullptr;
+    
+    double start_time = clock();
+    for (int i = 0; i < 120;i++){
+        Point value;
+        value.x = i;
+        value.y = i;
+        value.z = i;
+        list = addElement(list, i, value);
+        getValue(i, list);
+    }
+    cout<<countNodes(list)<<endl;
+    for (int i = 0; i < 120; i++)
+    {
+        cout<<countNodes(list)<<endl;
+       list =  deleteElement(list, i);
+    }
+  cout <<  countNodes(list)<<endl;
+    for (int i = 0; i < 10000;i++){
+        Point value;
+        value.x = i;
+        value.y = i;
+        value.z = i;
+        list = addElement(list, i, value);
+       
+    }
+    for (int i = 5; i < 4000; i++)
+    {
+        Point value;
+        value.x = i;
+        value.y = i;
+        value.z = i;
+        setValue(i, list, value);
+      //  getValue(i, list);
+    }
+    double end_time = clock();
+    double time =( end_time-start_time)/(1000*320);
+    cout<< "Seconds" << time<<endl;
 }

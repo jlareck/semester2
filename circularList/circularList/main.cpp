@@ -20,12 +20,16 @@ int main()
    // circularArray();
    // interactiveVector();
    // interactiveArray();
- //  interactiveList();
+//interactiveList();
     demoList();
-    cout << endl;
-    cout << endl;
-    //demoVector();
+   // cout << endl;
+  //  cout << endl;
+    demoVector();
   //  interactiveArray();
-    demoArray();
+ //   demoArray();
+  //  benchmark();
+   // benchmarkVector();
+   // benchmarkArray();
+    
     return 0;
 }

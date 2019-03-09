@@ -26,7 +26,7 @@ void deleteElement(Point arr[], int index, int& currentSize)
     }
     currentSize--;
 }
-void pushBeforeKeyElement(Point value, Point arr[], int index, int& currentSize)
+void addElement(Point value, Point arr[], int index, int& currentSize)
 {
     if (currentSize==0)
     {
@@ -57,7 +57,7 @@ void pushBeforeKeyElement(Point value, Point arr[], int index, int& currentSize)
     }
     currentSize++;
 }
-void set( Point arr[],int currentSize)
+void setValue( Point arr[],int currentSize)
 {
     cout << "Enter the index of element which you want to set value"<<endl;
     int index;
@@ -76,7 +76,7 @@ void set( Point arr[],int currentSize)
     value.enterCoord();
     arr[index] = value;
 }
-void set( Point arr[],int currentSize, Point value, int index)
+void setValue( Point arr[],int currentSize, Point value, int index)
 {
     if (index<0)
     {
@@ -91,7 +91,7 @@ void set( Point arr[],int currentSize, Point value, int index)
     
     arr[index] = value;
 }
-void get(int index, Point arr[], int currentSize)
+void getValue(int index, Point arr[], int currentSize)
 {
     if (index<0)
     {
@@ -161,7 +161,7 @@ void interactiveArray()
                         cout << "Enter value"<<endl;
                         Point value;
                         value.enterCoord();
-                        pushBeforeKeyElement(value, list, index, currentSize);
+                        addElement(value, list, index, currentSize);
                     }
                 }
                 else
@@ -195,7 +195,7 @@ void interactiveArray()
                     int index;
                     cin>> index;
                     cout << "Element "<< index<<endl;
-                    get(index,list, currentSize);
+                    getValue(index,list, currentSize);
                 }
                 break;
             }
@@ -208,7 +208,7 @@ void interactiveArray()
                     cout << "Error! There is no elements in list"<<endl;
                 }
                 else{
-                    set(list, currentSize);
+                    setValue(list, currentSize);
                 }
                 break;
             }
@@ -236,27 +236,27 @@ void demoArray()
     value.x = 0;
     value.y = 0;
     value.z = 0;
-    pushBeforeKeyElement(value, list, 0, currentSize);
+    addElement(value, list, 0, currentSize);
     printArray(list, currentSize);
     cout << "Added first point to list with x,y,z coordinates 0"<<endl;
     cout<< "Now we can add the point before index 0 for example with x,y,z coordinates 1"<<endl;
     value.x = 1;
     value.y = 1;
     value.z = 1;
-    pushBeforeKeyElement(value, list, 0, currentSize);
+    addElement(value, list, 0, currentSize);
     printArray(list, currentSize);
     cout<< "Let's add the point before index 1 for example with x,y,z coordinates 2"<<endl;
     value.x = 2;
     value.y = 2;
     value.z = 2;
-    pushBeforeKeyElement(value, list, 1, currentSize);
+    addElement(value, list, 1, currentSize);
     cout << "That is how our list look like"<<endl;
     printArray(list, currentSize);
     cout << "As this list is circular, you can enter any index that you want to push the point before. For example you want to add the element befor index 5, if you have three unique points it will add the point after going loop and add it before element with index 3"<<endl;
     value.x = 5;
     value.y = 5;
     value.z = 5;
-    pushBeforeKeyElement(value, list, 5, currentSize);
+    addElement(value, list, 5, currentSize);
     cout << "That is how our list look like"<<endl;
     printArray(list, currentSize);
     cout <<"But if you want to add new point to array, while array is full you will have an error and you must delete some element to add new"<< endl;
@@ -266,14 +266,45 @@ void demoArray()
     cout << "That is how our list look like"<<endl;
     printArray(list, currentSize);
     cout << "You can also change any value by index. Let's change element with index 1, by setting x,y,z coordinates 7. That is how element look like before changing"<<endl;
-    get(1,list,currentSize);
+    getValue(1,list,currentSize);
     value.x = 7;
     value.y = 7;
     value.z = 7;
-    set(list, currentSize, value, 1);
+    setValue(list, currentSize, value, 1);
     cout << "After changing"<<endl;
-    get(1,list,currentSize);
+    getValue(1,list,currentSize);
     cout << "That is how our list look like"<<endl;
     printArray(list, currentSize);
     
+}
+void benchmarkArray()
+{
+    const int size = 10000;
+    Point list[size];
+    double start_time = clock();
+    int currentSize = 0;
+    for (int i = 0; i < 10000;i++){
+        Point value;
+        value.x = i;
+        value.y = i;
+        value.z = i;
+        addElement(value, list, i, currentSize);
+        getValue(i+1, list, currentSize);
+    }
+    for (int i = 0; i < 5000; i++)
+    {
+        deleteElement(list, i, currentSize);
+    }
+    for (int i = 5; i < 4000; i++)
+    {
+        Point value;
+        value.x = i;
+        value.y = i;
+        value.z = i;
+        setValue(list, currentSize, value, i);
+        //  getValue(i, list);
+    }
+    double end_time = clock();
+    double time =( end_time-start_time)/(1000*320);
+    cout<< "Seconds" << time<<endl;
 }

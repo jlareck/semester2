@@ -10,11 +10,12 @@
 #define interactiveArray_hpp
 #include "pointstructure.hpp"
 void deleteElement(Point[] , int , int& );
-void pushBeforeKeyElement(Point , Point [], int , int& );
-void set( Point[],int );
-void set( Point ,int , Point , int );
-void get(int , Point[], int );
+void addElement(Point , Point [], int , int& );
+void setValue( Point[],int );
+void setValue( Point ,int , Point , int );
+void getValue(int , Point[], int );
 void printArray(Point [], int );
 void interactiveArray();
 void demoArray();
+void benchmarkArray();
 #endif /* interactiveArray_hpp */

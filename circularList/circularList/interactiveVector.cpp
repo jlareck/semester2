@@ -8,7 +8,7 @@
 
 #include "interactiveVector.hpp"
 
-void addElementInVector(vector<Point>& vec, int index, Point value)
+void addElement(vector<Point>& vec, int index, Point value)
 {
     if (vec.size()==0)
     {
@@ -137,7 +137,7 @@ void interactiveVector()
                     cout << "Enter value"<<endl;
                     Point value;
                     value.enterCoord();
-                    addElementInVector(list, index, value);
+                    addElement(list, index, value);
                 }
                 else
                     cout << "Error! Firstly you need to create a list"<<endl;
@@ -209,20 +209,20 @@ void demoVector()
     value.x = 0;
     value.y = 0;
     value.z = 0;
-    addElementInVector(list, 0, value);
+    addElement(list, 0, value);
     printAllElementsInVector(list);
     cout << "Added first point to list with x,y,z coordinates 0"<<endl;
     cout<< "Now we can add the point before zero index for example with x,y,z coordinates 1"<<endl;
     value.x = 1;
     value.y = 1;
     value.z = 1;
-    addElementInVector(list, 0, value);
+    addElement(list, 0, value);
     printAllElementsInVector(list);
     cout<< "Let's add the point before first index for example with x,y,z coordinates 2"<<endl;
     value.x = 2;
     value.y = 2;
     value.z = 2;
-    addElementInVector(list, 1, value);
+    addElement(list, 1, value);
     
     cout << "That is how our list look like"<<endl;
     printAllElementsInVector(list);
@@ -230,7 +230,7 @@ void demoVector()
     value.x = 5;
     value.y = 5;
     value.z = 5;
-    addElementInVector(list, 5, value);
+    addElement(list, 5, value);
     cout << "That is how our list look like"<<endl;
     printAllElementsInVector(list);
     cout << "So, now we can delete the point in list. Let's delete point wit index 1"<<endl;
@@ -247,4 +247,34 @@ void demoVector()
     getValue(list, 1);
     cout << "That is how our list look like"<<endl;
     printAllElementsInVector(list);
+}
+void benchmarkVector()
+{
+    
+    vector<Point> list;
+    double start_time = clock();
+    for (int i = 0; i < 10000;i++){
+        Point value;
+        value.x = i;
+        value.y = i;
+        value.z = i;
+        addElement(list, 0, value);
+        getValue(list, i+1);
+    }
+    for (int i = 0; i < 5000; i++)
+    {
+        deleteElement(list, i);
+    }
+    for (int i = 5; i < 4000; i++)
+    {
+        Point value;
+        value.x = i;
+        value.y = i;
+        value.z = i;
+        setValue(list, value, i);
+        //  getValue(i, list);
+    }
+    double end_time = clock();
+    double time =( end_time-start_time)/(1000*320);
+    cout<< "Seconds" << time<<endl;
 }

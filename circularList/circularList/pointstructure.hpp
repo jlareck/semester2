@@ -8,9 +8,10 @@
 
 #ifndef pointstructure_hpp
 #define pointstructure_hpp
-
+#include <ctime>
 #include <stdio.h>
 #include <iostream>
+
 using namespace std;
 struct Point{
     int x;

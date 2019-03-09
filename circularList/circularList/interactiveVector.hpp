@@ -11,11 +11,12 @@
 #include "pointstructure.hpp"
 #include <vector>
 using namespace std;
-void addElementInVector(vector<Point>& , int , Point );
+void addElement(vector<Point>& , int , Point );
 void deleteElement(vector<Point>& , int );
 void getValue(vector<Point> , int );
 void setValue(vector<Point>& );
 void printAllElementsInVector(vector<Point>);
 void interactiveVector();
 void demoVector();
+void benchmarkVector();
 #endif /* interactiveVector_hpp */
