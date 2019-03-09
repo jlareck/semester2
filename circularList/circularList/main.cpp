@@ -21,13 +21,13 @@ int main()
    // interactiveVector();
    // interactiveArray();
 //interactiveList();
-    demoList();
+ //   demoList();
    // cout << endl;
   //  cout << endl;
-    demoVector();
+   // demoVector();
   //  interactiveArray();
  //   demoArray();
-  //  benchmark();
+    benchmark();
    // benchmarkVector();
    // benchmarkArray();
     

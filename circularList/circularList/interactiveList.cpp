@@ -42,7 +42,7 @@ List* addElement(List* list, int index, Point value)
         List* p = list->next;
         
         prevNode = list;
-        int numberOfNodes = countNodes(list);
+        int numberOfNodes = countNodes(list)+1;
         index = index%numberOfNodes;
         if (index<0)
         {
@@ -79,20 +79,24 @@ List* deleteElement(List* list, int index)
     List* node = list, *prevNode;
 
     int numberOfNodes = countNodes(list);
-    if (index<0)
+    if (countNodes(list) == 0)
     {
-        index=abs(index-1);
-        index = index%numberOfNodes;
-        index = numberOfNodes-index;
+        list =nullptr;
     }
-    else
-        index = index%numberOfNodes;
-    if(node->next==list)
+   else if(node->next==list)
     {
         list = nullptr;
         node = nullptr;
     }
     else{
+        if (index<0)
+        {
+            index=abs(index-1);
+            index = index%numberOfNodes;
+            index = numberOfNodes-index;
+        }
+        else
+            index = index%numberOfNodes;
         do {
             prevNode=node;
             node=node->next;
