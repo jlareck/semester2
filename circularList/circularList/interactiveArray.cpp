@@ -107,6 +107,7 @@ void getValue(int index, Point arr[], int currentSize)
 void printArray(Point arr[], int currentSize)
 {
     int i = 0;
+    cout << "All points"<<endl;
     while (i<currentSize)
     {
         cout << arr[i].x <<" "<< arr[i].y<<" "<<arr[i].z<<endl;
@@ -213,7 +214,10 @@ void interactiveArray()
                 break;
             }
             case 6:{
-                printArray(list,currentSize);
+                if (currentSize==0)
+                    cout << "List is empty"<<endl;
+                else
+                    printArray(list,currentSize);
                 break;
             }
             default:

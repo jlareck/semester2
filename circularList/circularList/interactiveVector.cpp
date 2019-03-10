@@ -188,7 +188,10 @@ void interactiveVector()
                 break;
             }
             case 6:{
-                printAllElementsInVector(list);
+                if (list.size()==0)
+                    cout << "List is empty"<<endl;
+                else
+                    printAllElementsInVector(list);
                 break;
             }
             default:
@@ -233,8 +236,8 @@ void demoVector()
     addElement(list, 5, value);
     cout << "That is how our list look like"<<endl;
     printAllElementsInVector(list);
-    cout << "So, now we can delete the point in list. Let's delete point wit index 1"<<endl;
-    deleteElement(list, 0);
+    cout << "So, now we can delete the point in list. Let's delete point with index 0"<<endl;
+    deleteElement(list, 1);
     cout << "That is how our list look like"<<endl;
     printAllElementsInVector(list);
     cout << "You can also change any value by index. Let's change element with index 1, by setting x,y,z coordinates 7. That is how element look like before changing"<<endl;

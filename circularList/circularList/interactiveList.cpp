@@ -5,7 +5,6 @@
 //  Created by Mykola Medynsky on 3/5/19.
 //  Copyright © 2019 Mykola Medynskyi. All rights reserved.
 //
-
 #include "interactiveList.hpp"
 #include "pointstructure.hpp"
 List* addToEmpty(Point value)
@@ -16,43 +15,27 @@ List* addToEmpty(Point value)
     node->next = node;
     return node;
 }
-int countNodes(List* head)
-{
-    List* temp = head;
-    int result = 0;
-    if (head != NULL) {
-        do {
-            temp = temp->next;
-            result++;
-        } while (temp->next != head);
-    }
-    
-    return result;
-}
 
-List* addElement(List* list, int index, Point value)
+List* addElement(List* list, int index, Point value, int& currentSize)
 {
-    if (countNodes(list)==0)
+    if (currentSize==0)
     {
         list = addToEmpty(value);
+        currentSize++;
     }
     else{
         List* node = new List, *prevNode;
-        
         List* p = list->next;
-        
         prevNode = list;
-        int numberOfNodes = countNodes(list)+1;
-        index = index%numberOfNodes;
         if (index<0)
         {
             index=abs(index);
-            index = index%numberOfNodes;
-            index = numberOfNodes-index;
+            index = index%currentSize;
+            index = currentSize-index;
         }
         else
-            index = (index)%numberOfNodes;
-        
+            index = (index%currentSize);
+        currentSize++;
         do{
             if (p->index == index)
             {
@@ -74,35 +57,33 @@ List* addElement(List* list, int index, Point value)
     }
     return list;
 }
-List* deleteElement(List* list, int index)
+List* deleteElement(List* list, int index, int& currentSize)
 {
     List* node = list, *prevNode;
 
-    int numberOfNodes = countNodes(list);
-    if (countNodes(list) == 0)
+
+    if (currentSize == 0)
     {
         list =nullptr;
     }
    else if(node->next==list)
     {
         list = nullptr;
-        node = nullptr;
     }
     else{
         if (index<0)
         {
             index=abs(index-1);
-            index = index%numberOfNodes;
-            index = numberOfNodes-index;
+            index = index%currentSize;
+            index = currentSize-index;
         }
         else
-            index = index%numberOfNodes;
+            index = index%currentSize;
         do {
             prevNode=node;
             node=node->next;
         }while(node->index!=index);
         prevNode->next = node->next;
-        // free(node);
         List* currNode = node->next;
         do
         {
@@ -110,13 +91,20 @@ List* deleteElement(List* list, int index)
             currNode = currNode->next;
         }while(currNode!=list->next);
     }
+    currentSize--;
     return list;
 }
-void getValue(int index, List* list)
+void getValue(int index, List* list, int currentSize)
 {
     List* node = list->next;
-    int n = countNodes(list);
-    index = index%n;
+    if (index<0)
+    {
+        index = abs(index);
+        index = index%currentSize;
+        index = currentSize-index;
+    }
+    else
+        index = index%currentSize;
     do{
         node = node->next;
         
@@ -124,27 +112,37 @@ void getValue(int index, List* list)
     cout<< node->index<< ":" << node->data.x << " "<< node->data.y<< " "<<node->data.z<<endl;
     
 }
-void setValue(int index, List* list)
+void setValue(int index, List* list, int currentSize)
 {
     List* node = list->next;
-    int n = countNodes(list);
-    index = index%n;
+
+    if (index<0)
+    {
+        index = abs(index);
+        index = index%currentSize;
+        index = currentSize-index;
+    }
+    else
+        index = index%currentSize;
+  
     do{
         node = node->next;
-        
     }while(node->index!=index);
-    cout << "Enter data.x: "<<endl;
-    cin >> node->data.x;
-    cout << "Enter data.y: "<<endl;
-    cin >> node->data.y;
-    cout << "Enter data.z: "<<endl;
-    cin >> node->data.z;
+    
+    node->data.enterCoord();
 }
-void setValue(int index, List* list, Point value)
+void setValue(int index, List* list, Point value,int currentSize)
 {
     List* node = list->next;
-    int n = countNodes(list);
-    index = index%n;
+    if (index<0)
+    {
+        index = abs(index);
+        index = index%currentSize;
+        index = currentSize-index;
+    }
+    else
+        index = index%currentSize;
+    
     do{
         node = node->next;
         
@@ -157,12 +155,9 @@ void setValue(int index, List* list, Point value)
 }
 void printCircularList(List *list)
 {
+    
     List *p;
-    if (list == NULL)
-    {
-        cout << "List is empty." << endl;
-        return;
-    }
+
     p = list -> next;
     do
     {
@@ -178,6 +173,7 @@ void interactiveList()
     int action;
     bool checkIfCreatedList = false, loopFlag = true;
     List* list = nullptr;
+    int currentSize = 0;
     while(loopFlag){
         cout << "Actions" << endl;
         cout << 1 << " - Create empty"<<endl;
@@ -212,7 +208,7 @@ void interactiveList()
                     cout << "Enter value"<<endl;
                     Point value;
                     value.enterCoord();
-                    list = addElement(list, index, value);
+                    list = addElement(list, index, value, currentSize);
                 }
                 else
                     cout << "Error! Firstly you need to create a list"<<endl;
@@ -223,13 +219,13 @@ void interactiveList()
                 {
                     cout << "You didn't create a list, you need to create and add elements to it if you want to use this function"<<endl;
                 }
-                else if (countNodes(list)==0)
+                else if (currentSize==0)
                     cout << "Error! There is no elements to delete. You need to add some elements in list"<<endl;
                 else{
                     cout << "Enter the index of element that you want to delete" <<endl;
                     int index;
                     cin >> index;
-                   list =  deleteElement(list, index);
+                   list =  deleteElement(list, index, currentSize);
                 }
                 break;
             }
@@ -238,7 +234,7 @@ void interactiveList()
                 {
                     cout << "Error. You need to create list and add elements in it if you want to use this option"<<endl;
                 }
-                else if (checkIfCreatedList&&countNodes(list)==0) {
+                else if (checkIfCreatedList&&currentSize==0) {
                     cout << "Error! There is no elements in list. You need to add minimum one element if you want to use this case"<<endl;
                 }
                 else{
@@ -246,7 +242,7 @@ void interactiveList()
                     int index;
                     cin>> index;
                     cout << "Element "<< index<<endl;
-                    getValue(index, list);
+                    getValue(index, list, currentSize);
                 }
                 break;
             }
@@ -255,20 +251,24 @@ void interactiveList()
                 {
                     cout << "Error! You didn't create a list. Create a list and add minimum one element"<<endl;
                 }
-                else if(countNodes(list)==0) {
+                else if(currentSize==0) {
                     cout << "Error! There is no elements in list"<<endl;
                 }
                 else{
                     cout << "Enter the index of element which you want to set value"<<endl;
                     int index;
                     cin>> index;
-                    setValue(index, list);
+                    setValue(index, list, currentSize);
                 }
                 break;
             }
             case 6:{
-                cout << "All elements"<<endl;
-                printCircularList(list);
+                if (currentSize==0)
+                    cout << "List is empty"<<endl;
+                else{
+                    cout << "All elements"<<endl;
+                    printCircularList(list);
+                }
                 break;
             }
             default:
@@ -284,85 +284,77 @@ void demoList()
     List* list = nullptr;
     cout << "Empty list has just been created"<<endl;
     cout << "After creating empty list you can add points in list"<<endl;
-
+    int currentSize = 0;
     Point value;
     value.x = 0;
     value.y = 0;
     value.z = 0;
-    list = addElement(list, 0, value);
+    list = addElement(list, 0, value, currentSize);
     printCircularList(list);
     cout << "Added first point to list with x,y,z coordinates 0"<<endl;
     cout<< "Now we can add the point before zero index for example with x,y,z coordinates 1"<<endl;
     value.x = 1;
     value.y = 1;
     value.z = 1;
-    addElement(list, 0, value);
+    addElement(list, 0, value, currentSize);
     printCircularList(list);
     cout<< "Let's add the point before first index for example with x,y,z coordinates 2"<<endl;
     value.x = 2;
     value.y = 2;
     value.z = 2;
-    addElement(list, 1, value);
+    addElement(list, 1, value, currentSize);
     cout << "That is how our list look like"<<endl;
     printCircularList(list);
-    cout << "As this list is circular, you can enter any index that you want to push the point before. For example you want to add the element befor index 5, if you have three unique points it will add the point after going loop and add it before element with index 3"<<endl;
+    cout << "As this list is circular, you can enter any index that you want to push the point before. For example you want to add the element befor index 5, if you have three unique points it will add the point after going loop and add it before element with index 3."<<endl;
     value.x = 5;
     value.y = 5;
     value.z = 5;
-    addElement(list, 5, value);
+    addElement(list, 5, value, currentSize);
     cout << "That is how our list look like"<<endl;
     printCircularList(list);
-    cout << "So, now we can delete the point in list. Let's delete point wit index 0"<<endl;
-    list = deleteElement(list, 0);
+    
+    cout << "So, now we can delete the point in list. Let's delete point with index 1"<<endl;
+    list = deleteElement(list, 1, currentSize);
     cout << "That is how our list look like"<<endl;
     printCircularList(list);
     cout << "You can also change any value by index. Let's change element with index 1, by setting x,y,z coordinates 7. That is how element look like before changing"<<endl;
-    getValue(1, list);
+    getValue(1, list,currentSize);
     value.x = 7;
     value.y = 7;
     value.z = 7;
-    setValue(1, list,value);
+    setValue(1, list,value,currentSize);
     cout << "After changing"<<endl;
-    getValue(1, list);
+    getValue(1, list,currentSize);
     cout << "That is how our list look like"<<endl;
     printCircularList(list);
 }
 void benchmark()
 {
     List* list = nullptr;
-    
+    int currentSize = 0;
     double start_time = clock();
-    for (int i = 0; i < 120;i++){
-        Point value;
-        value.x = i;
-        value.y = i;
-        value.z = i;
-        list = addElement(list, i, value);
-        getValue(i, list);
-    }
-    cout<<countNodes(list)<<endl;
-    for (int i = 0; i < 120; i++)
-    {
-        cout<<countNodes(list)<<endl;
-       list =  deleteElement(list, i);
-    }
-  cout <<  countNodes(list)<<endl;
     for (int i = 0; i < 10000;i++){
         Point value;
         value.x = i;
         value.y = i;
         value.z = i;
-        list = addElement(list, i, value);
-       
+        list = addElement(list, i, value,currentSize);
+        getValue(i, list, currentSize);
     }
+
+    for (int i = 0; i < 5000; i++)
+    {
+       list =  deleteElement(list, i,currentSize);
+    }
+
     for (int i = 5; i < 4000; i++)
     {
         Point value;
         value.x = i;
         value.y = i;
         value.z = i;
-        setValue(i, list, value);
-      //  getValue(i, list);
+        setValue(i, list, value,currentSize);
+      
     }
     double end_time = clock();
     double time =( end_time-start_time)/(1000*320);

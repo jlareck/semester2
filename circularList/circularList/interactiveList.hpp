@@ -19,11 +19,12 @@ struct List{
     List* next;
 };
 List* addToEmpty(Point );
-int countNodes(List* );
-List* addElement(List* , int , Point );
-List* deleteElement(List* , int );
-void getValue(int , List* );
-void setValue(int , List* );
+
+List* addElement(List* , int , Point, int& );
+List* deleteElement(List* , int,int& );
+void getValue(int , List*, int );
+void setValue(int , List* , int);
+void setValue(int , List* , Point ,int );
 void printCircularList(List *);
 void interactiveList();
 void demoList();
