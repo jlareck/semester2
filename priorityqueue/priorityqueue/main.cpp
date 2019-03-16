@@ -36,10 +36,12 @@ void peek(Node* node)
 }
 Node* pop(Node* node)
 {
+    Node* cur = node;
     if (node==NULL)
         cout << "There is no nodes to delete"<<endl;
     else
         node = node->next;
+    delete cur;
     return node;
 }
 Node* push(Node* node, int priority, int value)
@@ -142,7 +144,26 @@ void demo()
     cout << "You can print all elements"<<endl;
     printNodes(node);
 }
+void modes()
+{
+    cout << "Choose the mode"<<endl;
+    cout << 1 << " - Interactive mode"<<endl;
+    cout << 2 << " - Demo"<<endl;
+    int action;
+    cin>> action;
+    switch (action) {
+        case 1:
+            interactive();
+            break;
+        case 2:
+            demo();
+            break;
+        default:
+            cout << "Error!"<<endl;
+            break;
+    }
+}
 int main(int argc, const char * argv[]) {
-    demo();
+    modes();
     return 0;
 }
