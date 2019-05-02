@@ -10,18 +10,25 @@
 #include <ctime>
 #include <algorithm>
 using namespace std;
-void bubbleSort(double arr[], int size) {
+void bubbleSort(double arr[], int size, bool flag) {
+    if (flag)
+    cout <<"Bubble sort algorithm is simple to understand. It works by repeatedly swapping the adjacent elements if they are in wrong order"<<endl;
     for (int i = 0; i < size-1; i++) {
         for (int j = 0; j< size-1-i; j++) {
             if (arr[j]>arr[j+1])
                 swap(arr[j], arr[j+1]);
         }
     }
+ 
 }
-int partition (double arr[], int low, int high) {
+int partition (double arr[], int low, int high, bool& flag) {
     double pivot = arr[low];
     int i = low;
-    
+    if (flag){
+        
+        cout << "This function takes first(in this case leftmost) element as pivot, places the pivot element at its correct position in sorted array, and places all smaller (smaller than pivot) to left of pivot and all greater elements to right of pivot"<<endl;
+        flag = false;
+    }
     for (int j = low; j < high; j++) {
         if (arr[j] < pivot) {
             i++;
@@ -31,12 +38,20 @@ int partition (double arr[], int low, int high) {
     swap(arr[i], arr[low]);
     return i;
 }
-void quickSort(double arr[], int low, int high) {
+void quickSort(double arr[], int low, int high, bool& flag) {
+   static bool partitionFlag = true;
+    
     if (low < high) {
-        double partionIndex = partition(arr, low, high);
-        quickSort(arr, low, partionIndex - 1);
-        quickSort(arr, partionIndex + 1, high);
+
+        double partionIndex = partition(arr, low, high, partitionFlag);
+        if (flag){
+            cout << "Lomuto partition scheme is optimized quicksort algorithm. Separately sort elements before partition and after partition"<<endl;
+            flag = false;
+        }
+        quickSort(arr, low, partionIndex - 1, flag);
+        quickSort(arr, partionIndex + 1, high, flag);
     }
+   
 }
 void copyArray(double arr1[],int indexBegin,int indexEnd,double arr2[]) {
     for(int i = indexBegin; i < indexEnd; i++)
@@ -55,27 +70,37 @@ void topDownMerge(double arr1[],int  indexBegin, int indexMiddle, int indexEnd,d
     }
 }
 
-void topDownSplitMerge(double arr2[], int indexBegin,int indexEnd, double arr1[]) {
-    if(indexEnd - indexBegin < 2)
+void topDownSplitMerge(double arr2[], int indexBegin,int indexEnd, double arr1[], bool& flag) {
+ 
+    if (indexEnd - indexBegin < 2)
         return;
 
     int iMiddle = (indexEnd + indexBegin) / 2;
-   
     
-    topDownSplitMerge(arr1, indexBegin,  iMiddle, arr2);
-    topDownSplitMerge(arr1, iMiddle,    indexEnd, arr2);
+    if (flag){
+        flag = false;
+        cout << "Recursively divide on n subarrays and then merge them"<<endl;
+    }
+    topDownSplitMerge(arr1, indexBegin, iMiddle, arr2, flag);
+    topDownSplitMerge(arr1, iMiddle,   indexEnd, arr2, flag);
     topDownMerge(arr2, indexBegin, iMiddle, indexEnd, arr1);
 }
-void topDownMergeSort(double arr1[],double arr2[], int n) {
+void topDownMergeSort(double arr1[],double arr2[], int n, bool flag) {
+    if (flag) {
+        cout << "Array1 has the items to sort and array2 is a work array"<<endl;
+        cout << "Firstly goes duplication of array1 into array2"<<endl;
+        cout << "Than sorting progress" << endl;
+    }
     copyArray(arr1, 0, n, arr2);
-    topDownSplitMerge(arr2, 0, n, arr1);
+    topDownSplitMerge(arr2, 0, n, arr1, flag);
 }
 void print(double arr[], int size) {
+    
     for (int i = 0; i < size; i++) {
         cout << arr[i]<< ' ';
     }
 }
-void insertionSortForCombinedSorting(double arr[], int n, int indexBegin, int indexEnd) {
+void insertionSortForCombinedSorting(double arr[], int n, int indexBegin, int indexEnd) { // this function can be used in combined sort algorithm instead of bubble sort
     int i, j;
     double key;
     for (i = indexBegin+1; i < indexEnd; i++) {
@@ -98,33 +123,42 @@ void bubbleSortForCombinedSorting(double arr[],int indexBegin, int indexEnd, int
     }
 }
 
-void combinationMergeSplitAndBubbleSort(double arr2[], int indexBegin,int indexEnd, double arr1[]) {
-    int start = clock();
-    if(indexEnd - indexBegin < 2)
+void combinationMergeSplitAndBubbleSort(double arr2[], int indexBegin,int indexEnd, double arr1[], bool& flag) {
+   
+    if (indexEnd - indexBegin < 2)
         return;
     
+    if (flag){
+        cout << "Recursively divide on subarrays and when the size of those subarrays are less than 10 -> uses bubble sort and and after that runs merge function"<<endl;
+        flag = false;
+    }
   
     int indexMiddle = (indexEnd + indexBegin) / 2;
 
     if (indexEnd - indexMiddle < 10 || indexMiddle-indexBegin < 10) {
-//        bubbleSortForCombinedSorting(arr2, indexBegin, indexMiddle, indexMiddle-indexBegin);
-//        bubbleSortForCombinedSorting(arr2, indexMiddle, indexEnd, indexEnd-indexMiddle);
-        insertionSortForCombinedSorting(arr2, indexMiddle-indexBegin, indexBegin, indexMiddle );
-        insertionSortForCombinedSorting(arr2, indexEnd-indexMiddle, indexMiddle, indexEnd );
+        bubbleSortForCombinedSorting(arr2, indexBegin, indexMiddle, indexMiddle-indexBegin);
+        bubbleSortForCombinedSorting(arr2, indexMiddle, indexEnd, indexEnd-indexMiddle);
+  //      insertionSortForCombinedSorting(arr2, indexMiddle-indexBegin, indexBegin, indexMiddle );
+  //      insertionSortForCombinedSorting(arr2, indexEnd-indexMiddle, indexMiddle, indexEnd );
         topDownMerge(arr2, indexBegin, indexMiddle, indexEnd, arr1);
     }
     
     else {
-        combinationMergeSplitAndBubbleSort(arr1, indexBegin,  indexMiddle, arr2);
-         combinationMergeSplitAndBubbleSort(arr1, indexMiddle,    indexEnd, arr2);
-         topDownMerge(arr2, indexBegin, indexMiddle, indexEnd, arr1);
+        combinationMergeSplitAndBubbleSort(arr1, indexBegin,  indexMiddle, arr2, flag);
+        combinationMergeSplitAndBubbleSort(arr1, indexMiddle,    indexEnd, arr2, flag);
+        topDownMerge(arr2, indexBegin, indexMiddle, indexEnd, arr1);
     }
 
 
 }
-void combinedSort(double arr1[],double arr2[], int n) {
+void combinedSort(double arr1[],double arr2[], int n, bool flag) {
     copyArray(arr1, 0, n, arr2);
-    combinationMergeSplitAndBubbleSort(arr2, 0, n, arr1);
+    if (flag) {
+        cout << "Array1 has the items to sort and array2 is a work array"<<endl;
+        cout << "Firstly goes duplication of array1 into array2"<<endl;
+        cout << "Than sorting progress" << endl;
+    }
+    combinationMergeSplitAndBubbleSort(arr2, 0, n, arr1, flag);
 }
 void randomArray(double arr[], int size) {
     for (int i = 0; i < size; i++ ) {
@@ -132,55 +166,57 @@ void randomArray(double arr[], int size) {
     }
 }
 void benchmarkTopDownMergeSort() {
-    const int size = 10000;
+    const int size = 100;
     double arr[size];
     
     double arr2[size];
     randomArray(arr, size);
     clock_t start = clock();
-
-    topDownMergeSort(arr, arr2, size);
+    bool flag = false;
+    topDownMergeSort(arr, arr2, size,flag);
 
     clock_t end = clock();
     cout<< "Time: " << ((double)((end-start))/CLOCKS_PER_SEC) << " seconds"<<endl;
 
 }
 void benchmarkCombinedSort() {
-    const int size = 10000;
+    const int size = 100;
     double arr[size];
     
     double arr2[size];
     randomArray(arr, size);
     clock_t start = clock();
-   
-    combinedSort(arr, arr2, size);
+   bool flag = false;
+    combinedSort(arr, arr2, size, flag);
     
     clock_t end = clock();
     cout<< "Time: " << ((double)((end-start))/CLOCKS_PER_SEC) << " seconds"<<endl;
     
 }
 void benchmarkQuickSort() {
-    const int size = 10000;
+    const int size = 100;
     double arr[size];
     randomArray(arr, size);
     clock_t start = clock();
-    quickSort(arr, 0, size);
+    bool flag = false;
+    quickSort(arr, 0, size,flag);
     clock_t end = clock();
     cout<< "Time: " << ((double)((end-start))/CLOCKS_PER_SEC) << " seconds"<<endl;
-    print(arr, size);
+    //print(arr, size);
 }
 void benchmarkBubbleSort() {
-    const int size = 10000;
+    const int size = 100;
     double arr[size];
     randomArray(arr, size);
     clock_t start = clock();
-    bubbleSort(arr, size);
+    bool flag = flag;
+    bubbleSort(arr, size, flag);
     clock_t end = clock();
     cout<< "Time: " << ((double)((end-start))/CLOCKS_PER_SEC) << " seconds"<<endl;
-    print(arr, size);
+    //print(arr, size);
 }
 void benchmarkAlgorithm() {
-    const int size = 10000;
+    const int size = 100;
     double arr[size];
     randomArray(arr, size);
     clock_t start = clock();
@@ -190,28 +226,37 @@ void benchmarkAlgorithm() {
    // print(arr, size);
 }
 void demoTopDownMergeSort() {
-    const int size = 10000;
+    const int size = 100;
     double arr[size];
-    
     double arr2[size];
     randomArray(arr, size);
-    clock_t start = clock();
-    clock_t end = clock();
-    cout<< "Time: " << ((double)((end-start))/CLOCKS_PER_SEC) << " seconds"<<endl;
-    topDownMergeSort(arr, arr2, size);
-
+    bool flag = true;
+    combinedSort(arr, arr2, size, flag);
+    print(arr, size);
+    flag = true;
+    cout << endl;
+    randomArray(arr, size);
+    bubbleSort(arr,size, flag);
+    print(arr, size);
+    cout << endl;
+    flag = true;
+    randomArray(arr, size);
+    topDownMergeSort(arr, arr2, size, flag);
+    print(arr, size);
+    cout << endl;
+      flag = true;
+    quickSort(arr, 0, size,flag);
+    print(arr, size);
 }
 int main(int argc, const char * argv[]) {
-//    double arr[5]={5.3 ,10.8, 10.7, 2.9,11};
-//    double arrB[5];
-//    // bubbleSo rt(arr, 5);
-//    // quickSort(arr, 0, 4);
-//    topDownMergeSort(arr, arrB, 5);
-//    print(arr, 5 );
-    benchmarkQuickSort();
-    //benchmarkBubbleSort();
-   // benchmarkAlgorithm();
-    // cout << "Hello, World!\n";
-    //benchmarkTopDownMergeSort();
+
+//    benchmarkTopDownMergeSort();
+//    benchmarkBubbleSort();
+//    benchmarkQuickSort();
+//    benchmarkCombinedSort();
+//    benchmarkAlgorithm();
+   
+    demoTopDownMergeSort();
+    
     return 0;
 }
