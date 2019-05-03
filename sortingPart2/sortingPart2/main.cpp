@@ -398,7 +398,7 @@ void interactiveInterface()
         cin >> action;
         switch (action) {
             case 1:
-                addRandomMonster(monster);
+                createAndAddMonster(monster);
                 break;
             case 2:
                 printAll(monster);
