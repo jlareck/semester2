@@ -152,24 +152,7 @@ void task1() {
     }
     
 }
-//int countNodesInTree(Employee *root)
-//{
-//    int count = 1;
-//    for (int i = 0; i < root->childs.size();i++){
-//        if (root->childs[i] != NULL) {
-//            count += countNodesInTree(root->childs[i]);
-//        }
-//    }
-//    return count;
-//}
-//int countNodes(Employee *tree)
-//{
-//    unsigned int count = 0;
-//    if (tree != NULL) {
-//        count = countNodesInTree(tree);
-//    }
-//    return count;
-//}
+
 int getHeight(Employee *root) {
     if (root == NULL)
         return 0;
@@ -220,12 +203,12 @@ Employee* BuildKaryTree(vector<Employee*>& arr, int k, Employee*& root, int h)
     }
     return root;
 }
-void traversal(Employee*& node){
+void traversalHeight(Employee*& node){
     if (!node)
         return;
     node->height = getHeight(node);
     for (int i = 0; i < node->childs.size(); i++){
-        traversal(node->childs[i]);
+        traversalHeight(node->childs[i]);
     }
 }
 void printTreeInBrackets(Employee* node) {
@@ -233,7 +216,7 @@ void printTreeInBrackets(Employee* node) {
         return;
     }
   
-    cout<<node->height<<"(";
+    cout<<node->key<<"(";
     for (int i = 0; i < node->childs.size(); i++){
         printTreeInBrackets(node->childs[i]);
     }
@@ -253,14 +236,14 @@ void task2() {
        
         employee = randomEmployee();
         employee->key = i;
-        //printEmployee(employee);
         persons.push_back(employee);
-        cout << persons[i]->key<<endl;
+       
     }
     int h = 0;
     BuildKaryTree(persons, numberOfChilds, root, h);
     
-    traversal(root);
+    traversalHeight(root);
+    cout << "Tree: "<<endl;
     printTreeInBrackets(root);
 
 }
@@ -335,7 +318,9 @@ void task4(){
             k++;
         }
     }
+    cout << "Tree from top to bottom: "<<endl;
     printBST(root);
+    cout << "Printing in right order: "<<endl;
     inorder(root);
 }
 void addEdge(Employee* e1, Employee* e2, vector<Employee*> adj[])
@@ -371,8 +356,6 @@ int NumberOfconnectedComponents(int V, vector<Employee*> adj[])
     
     return count;
 }
-
-
 void printGraph(vector<Employee*> adj[], int V)
 {
     for (int v = 0; v < V; ++v)
@@ -413,13 +396,18 @@ void task3() {
             
         }
     }
+    cout << "Graph: "<<endl;
     printGraph(adj, 31);
+    
     cout << NumberOfconnectedComponents(31, adj)<<endl;;
 }
 
 int main(int argc, const char * argv[]) {
 
     srand(time(nullptr));
-    task3();
+  //  task1();
+    //task2();
+    //task3();
+    task4();
     return 0;
 }
