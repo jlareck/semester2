@@ -170,43 +170,57 @@ int countNodes(Employee *tree)
     return count;
 }
 
-Employee* BuildKaryTree(vector<Employee*> arr, int k, int h, int& ind)
+Employee* BuildKaryTree(vector<Employee*>& arr, int k, Employee*& root, int h)
 {
 
-    if (arr.size() <= 0)
-        return NULL;
-
-    Employee* nNode = arr[ind];
-    if (nNode == NULL) {
+    
+    if (root == NULL) {
         cout << "Memory error" << endl;
         return NULL;
     }
-
+    int j = 0;
     for (int i = 0; i < k; i++) {
 
-        if (ind < arr.size() - 1 && h > 1) {
-            ind++;
-
-            nNode->childs.push_back(BuildKaryTree(arr, k, h - 1, ind));
+        if (i < arr.size()){
+            
+            root->childs.push_back(arr[i]);
+            j++;
         }
         else {
-            nNode->childs.push_back(NULL);
+            root->childs.push_back(NULL);
         }
     }
-    return nNode;
+    h++;
+    for (int i = 0; i< k; i++){
+        if (i<j){
+            arr.erase(arr.begin());
+        }
+    }
+    for(int i = 0; i < k; i++)
+    {
+        if (root->childs[i]!=NULL&&arr.size()!=0&&h-1<1){
+            
+            int newK = 2 + rand() % 5;
+            BuildKaryTree(arr, newK, root->childs[i],h);
+        }
+        if(i == k-1){
+            h--;
+        }
+    }
+    return root;
 }
 
-Employee* BuildKaryTree(vector<Employee*> arr, int k, int ind)
-{
-    int height = (int)ceil(log((double)arr.size() * (k - 1) + 1)
-                           / log((double)k));
-    return BuildKaryTree(arr, k, height, ind);
-}
+//Employee* BuildKaryTree(vector<Employee*> arr, int k, int ind)
+//{
+//    int height = (int)ceil(log((double)arr.size() * (k - 1) + 1)
+//                           / log((double)k));
+//    return BuildKaryTree(arr, k, height, ind);
+//}
 void printTreeInBrackets(Employee* node) {
     if (!node) {
         return;
     }
-    cout<<node->value<<"(";
+    cout<<node->key<<"(";
     for (int i = 0; i < node->childs.size(); i++){
         printTreeInBrackets(node->childs[i]);
     }
@@ -214,27 +228,28 @@ void printTreeInBrackets(Employee* node) {
     
 }
 void task2() {
-    Employee* root;
+    Employee* root = randomEmployee();
    
     //min + rand() % (( max + 1 ) - min);2 + rand() % 4
     int numberOfChilds = 2 + rand() % 5;
     vector<Employee*> persons;
-    Employee* employee;
-    for (int i = 0; i<10; i++)
+   Employee* employee = new Employee;
+    root->key = 100;
+    for (int i = 0; i<12; i++)
     {
+       
         employee = randomEmployee();
         employee->key = i;
         //printEmployee(employee);
         persons.push_back(employee);
-        cout << employee->value<<endl;
+        cout << persons[i]->key<<endl;
     }
-
-    for (int i = 0; i < 31; i++) {
-        
-        root = BuildKaryTree(persons, numberOfChilds, i);
-    }
+    int h = 0;
+    BuildKaryTree(persons, numberOfChilds, root, h);
     
+   
     printTreeInBrackets(root);
+
 }
 int main(int argc, const char * argv[]) {
 
