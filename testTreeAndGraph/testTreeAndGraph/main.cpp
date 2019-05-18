@@ -26,6 +26,7 @@ struct Employee {
     double value;
     double distance;
     int key;
+    int height;
     vector<Employee*> childs;
 };
 struct DistanceEmployee{
@@ -151,36 +152,46 @@ void task1() {
     }
     
 }
-int countNodesInTree(Employee *root)
-{
-    int count = 1;
-    for (int i = 0; i < root->childs.size();i++){
-        if (root->childs[i] != NULL) {
-            count += countNodesInTree(root->childs[i]);
-        }
+//int countNodesInTree(Employee *root)
+//{
+//    int count = 1;
+//    for (int i = 0; i < root->childs.size();i++){
+//        if (root->childs[i] != NULL) {
+//            count += countNodesInTree(root->childs[i]);
+//        }
+//    }
+//    return count;
+//}
+//int countNodes(Employee *tree)
+//{
+//    unsigned int count = 0;
+//    if (tree != NULL) {
+//        count = countNodesInTree(tree);
+//    }
+//    return count;
+//}
+int getHeight(Employee *root) {
+    if (root == NULL)
+        return 0;
+    vector<int> arr(root->childs.size());
+    for (int i = 0; i < root->childs.size(); i++)
+    {
+        arr[i] = getHeight(root->childs[i]);
     }
-    return count;
-}
-int countNodes(Employee *tree)
-{
-    unsigned int count = 0;
-    if (tree != NULL) {
-        count = countNodesInTree(tree);
+    if (arr.size() == 0){
+        return 1;
     }
-    return count;
+    return 1 + *max_element(arr.begin(), arr.end());
 }
-
 Employee* BuildKaryTree(vector<Employee*>& arr, int k, Employee*& root, int h)
 {
-
-    
     if (root == NULL) {
         cout << "Memory error" << endl;
         return NULL;
     }
     int j = 0;
     for (int i = 0; i < k; i++) {
-
+        
         if (i < arr.size()){
             
             root->childs.push_back(arr[i]);
@@ -198,7 +209,7 @@ Employee* BuildKaryTree(vector<Employee*>& arr, int k, Employee*& root, int h)
     }
     for(int i = 0; i < k; i++)
     {
-        if (root->childs[i]!=NULL&&arr.size()!=0&&h-1<1){
+        if (root->childs[i]!=NULL && arr.size()>0 && h-1<2){
             
             int newK = 2 + rand() % 5;
             BuildKaryTree(arr, newK, root->childs[i],h);
@@ -209,18 +220,20 @@ Employee* BuildKaryTree(vector<Employee*>& arr, int k, Employee*& root, int h)
     }
     return root;
 }
-
-//Employee* BuildKaryTree(vector<Employee*> arr, int k, int ind)
-//{
-//    int height = (int)ceil(log((double)arr.size() * (k - 1) + 1)
-//                           / log((double)k));
-//    return BuildKaryTree(arr, k, height, ind);
-//}
+void traversal(Employee*& node){
+    if (!node)
+        return;
+    node->height = getHeight(node);
+    for (int i = 0; i < node->childs.size(); i++){
+        traversal(node->childs[i]);
+    }
+}
 void printTreeInBrackets(Employee* node) {
     if (!node) {
         return;
     }
-    cout<<node->key<<"(";
+  
+    cout<<node->height<<"(";
     for (int i = 0; i < node->childs.size(); i++){
         printTreeInBrackets(node->childs[i]);
     }
@@ -233,9 +246,9 @@ void task2() {
     //min + rand() % (( max + 1 ) - min);2 + rand() % 4
     int numberOfChilds = 2 + rand() % 5;
     vector<Employee*> persons;
-   Employee* employee = new Employee;
+    Employee* employee = new Employee;
     root->key = 100;
-    for (int i = 0; i<12; i++)
+    for (int i = 0; i<31; i++)
     {
        
         employee = randomEmployee();
@@ -247,13 +260,166 @@ void task2() {
     int h = 0;
     BuildKaryTree(persons, numberOfChilds, root, h);
     
-   
+    traversal(root);
     printTreeInBrackets(root);
 
 }
+struct bstNode{
+    bstNode* left;
+    bstNode* right;
+    DistanceEmployee data;
+    int key;
+};
+bstNode* insert(bstNode* root, DistanceEmployee node, int k)
+{
+
+    if (root == NULL){
+        root = new bstNode;
+        root->data = node;
+        root->key = k;
+        root->left = root->right = NULL;
+        return root;
+    }
+    
+   
+    if (node.distance < root->data.distance)
+        root->left = insert(root->left, node, k);
+    else if (node.distance > root->data.distance)
+        root->right = insert(root->right, node, k);
+    
+    
+    return root;
+}
+void printBST(bstNode* node) {
+    if (!node) {
+        return;
+    }
+    
+    cout<<node->key<<"(";
+    
+    printBST(node->left);
+    printBST(node->right);
+    
+    cout<<")";
+}
+void inorder(bstNode *root)
+{
+    if (root != NULL)
+    {
+        inorder(root->left);
+        cout << root->key<<endl;;
+        inorder(root->right);
+    }
+}
+void task4(){
+    vector<Employee*> persons;
+    Employee* employee;
+    bstNode* root = NULL;
+    for (int i = 0; i<8; i++)
+    {
+        employee = randomEmployee();
+        printEmployee(employee);
+        persons.push_back(employee);
+    }
+    sort(persons.begin(), persons.end(), comparator);
+    vector<DistanceEmployee> arrayOfDistances;
+    int k = 0;
+    for (int i = 1; i<8; i++) {
+        for (int j = 0; j < i; j++) {
+            DistanceEmployee distanceEmployeeObject;
+            distanceEmployeeObject.distance = distance(persons[i], persons[j]);
+            distanceEmployeeObject.employee1 = persons[i];
+            distanceEmployeeObject.employee2 = persons[j];
+            arrayOfDistances.push_back(distanceEmployeeObject);
+            root = insert(root, distanceEmployeeObject,k);
+            k++;
+        }
+    }
+    printBST(root);
+    inorder(root);
+}
+void addEdge(Employee* e1, Employee* e2, vector<Employee*> adj[])
+{
+    adj[e1->key].push_back(e2);
+    adj[e2->key].push_back(e1);
+}
+void DFSUtil(int v, bool visited[], vector<Employee*> adj[])
+{
+
+    visited[v] = true;
+    
+    for (int i = 0; i < adj[v].size(); i++){
+        if (!visited[i])
+            DFSUtil(i, visited, adj);
+    }
+}
+int NumberOfconnectedComponents(int V, vector<Employee*> adj[])
+{
+
+    bool* visited = new bool[V];
+
+    int count = 0;
+    for (int v = 0; v < V; v++)
+        visited[v] = false;
+    
+    for (int v = 0; v < V; v++) {
+        if (visited[v] == false) {
+            DFSUtil(v, visited, adj);
+            count += 1;
+        }
+    }
+    
+    return count;
+}
+
+
+void printGraph(vector<Employee*> adj[], int V)
+{
+    for (int v = 0; v < V; ++v)
+    {
+        cout << "\n Adjacency list of vertex "
+        << v << "\n head ";
+        for (Employee* x : adj[v])
+            cout << "-> " << x->key;
+        printf("\n");
+    }
+}
+void task3() {
+    vector<Employee*> adj[100];
+    vector<Employee*> persons;
+    Employee* employee;
+    for (int i = 0; i<31; i++)
+    {
+        employee = randomEmployee();
+        employee->key = i;
+        printEmployee(employee);
+        persons.push_back(employee);
+    }
+    sort(persons.begin(), persons.end(), comparator);
+    vector<DistanceEmployee> arrayOfDistances;
+    int distance1 = 20;
+    for (int i = 1; i<31; i++)
+    {
+        for (int j = 0; j < i; j++) {
+            DistanceEmployee distanceEmployeeObject;
+            distanceEmployeeObject.distance = distance(persons[i], persons[j]);
+            distanceEmployeeObject.employee1 = persons[i];
+            distanceEmployeeObject.employee2 = persons[j];
+            cout << distanceEmployeeObject.distance<<endl;
+            if (distanceEmployeeObject.distance<distance1){
+                addEdge(distanceEmployeeObject.employee1, distanceEmployeeObject.employee2, adj);
+            }
+            arrayOfDistances.push_back(distanceEmployeeObject);
+            
+        }
+    }
+    printGraph(adj, 31);
+    cout << NumberOfconnectedComponents(31, adj)<<endl;;
+}
+
 int main(int argc, const char * argv[]) {
 
     srand(time(nullptr));
-    task2();
+    task3();
     return 0;
 }
