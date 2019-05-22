@@ -219,6 +219,8 @@ void task2(){
     printTreeInBrackets(root);
 }
 void task1() {
+    cout << "Welcome to demo mode n-ary tree"<<endl;
+    
     Node* root = createNode(0, 0);
     root->child.push_back(createNode(1, 1));
     root->child.push_back(createNode(2, 2));
@@ -246,6 +248,58 @@ void task1() {
         cout << "error"<<endl;
     
 }
+void demoNaryTree(){
+    cout << "WELCOME TO DEMO MODE" << endl;
+    cout << "As you know tree is a hierarchical data structure with a root value and subtrees of children with a parent node, represented as a set of linked nodes" << endl;
+    cout << "In this program element have to values: the first is key - unique identifier for each node, and second one is data - value that you want to put in node" <<endl;
+    cout << "If you want to add element in tree you need to enter the path to it (order of keys)."<<endl;
+    cout << "So, let's begin"<<endl;
+    cout << "The first action that we will do is creating root. It will have key 0 and data 0."<<endl;
+    Node* root = createNode(0, 0);
+    cout << "Next we can add some elements by path." << endl;
+    vector<int> path;
+    path.push_back(0);
+    cout << "On this stage path can only have one value and it is 0."<<endl;
+    cout << "So let's add (1,1), (2,2), (3,3) by that path."<<endl;
+    int i = 1;
+    bool flag = false;
+    root = addElementbyPath(root, path, i, flag,1,1);
+    i = 1;
+    flag = false;
+    root = addElementbyPath(root, path, i, flag,2,2);
+    i = 1;
+    flag = false;
+    root = addElementbyPath(root, path, i, flag,3,3);
+    cout << "Now let's see how tree looks like. Tree: "<<endl;
+    printTreeInBrackets(root);
+    cout << "After that I want to add some more elements((4, 4),(5, 5) (6, 6)) in differnt nodes"<<endl;
+    root->child[0]->child.push_back(createNode(4, 4));
+    root->child[0]->child.push_back(createNode(5, 5));
+    root->child[0]->child[1]->child.push_back(createNode(6, 6));
+    cout << "You can also get path to node by key if this node is existed in tree. Lets find path to node with key 6" << endl;
+    path.clear();
+    cout << "Path: ";
+    printPath(root, 6);
+    cout << endl;
+    cout << "There is also function to get data by path. Lets get data by path 0->1->4"<<endl;
+    path.push_back(0);
+    path.push_back(1);
+    path.push_back(4);
+    i = 1;
+    flag = false;
+    cout << "Data by path 0->1->4 is ";
+    getElementbyPath(root, path, i,flag);
+    cout << endl;
+    cout << "And finaly you cand delete node in tree by path let's delete subtree 0->1"<<endl;
+    Node* subtree = nullptr;
+    i = 1;
+    flag = false;
+    deleteElementbyPath(root, path, i, flag, subtree);
+    cout << "Final tree: " <<endl;
+    printTreeInBrackets(root);
+    
+}
+
 void interactiveMode() {
     int action;
     bool flag = true;
@@ -437,13 +491,16 @@ void interactiveMode() {
                 cout << "Good bye"<<endl;
                 flag = false;
                 break;
-            default:
+            default:{
+                cout << "Try again"<<endl;
                 break;
+            }
         }
     }
 }
 int main()
 {
-    interactiveMode();
+  //  interactiveMode();
+    demoNaryTree();
     return 0;
 }
