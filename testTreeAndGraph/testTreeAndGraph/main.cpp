@@ -358,11 +358,11 @@ int NumberOfconnectedComponents(int V, vector<Employee*> adj[])
 }
 void printGraph(vector<Employee*> adj[], int V)
 {
-    for (int v = 0; v < V; ++v)
+    for (int i = 0; i < V; i++)
     {
         cout << "\n Adjacency list of vertex "
-        << v << "\n head ";
-        for (Employee* x : adj[v])
+        << i << "\n head ";
+        for (Employee* x : adj[i])
             cout << "-> " << x->key;
         printf("\n");
     }
@@ -383,7 +383,7 @@ void task3() {
     int distance1 = 20;
     for (int i = 1; i<31; i++)
     {
-        for (int j = 0; j < i; j++) {
+        for (int j = 0; j <= i; j++) {
             DistanceEmployee distanceEmployeeObject;
             distanceEmployeeObject.distance = distance(persons[i], persons[j]);
             distanceEmployeeObject.employee1 = persons[i];
@@ -410,7 +410,7 @@ int main(int argc, const char * argv[]) {
     srand(time(nullptr));
   //  task1();
     //task2();
-    //task3();
-    task4();
+    task3();
+    //task4();
     return 0;
 }
