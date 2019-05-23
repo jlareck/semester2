@@ -344,12 +344,12 @@ int NumberOfconnectedComponents(int V, vector<Employee*> adj[])
     bool* visited = new bool[V];
 
     int count = 0;
-    for (int v = 0; v < V; v++)
-        visited[v] = false;
+    for (int i = 0; i < V; i++)
+        visited[i] = false;
     
-    for (int v = 0; v < V; v++) {
-        if (visited[v] == false) {
-            DFSUtil(v, visited, adj);
+    for (int i = 0; i < V; i++) {
+        if (visited[i] == false) {
+            DFSUtil(i, visited, adj);
             count += 1;
         }
     }
@@ -368,7 +368,7 @@ void printGraph(vector<Employee*> adj[], int V)
     }
 }
 void task3() {
-    vector<Employee*> adj[100];
+    vector<Employee*> adj[50];
     vector<Employee*> persons;
     Employee* employee;
     for (int i = 0; i<31; i++)
@@ -389,9 +389,12 @@ void task3() {
             distanceEmployeeObject.employee1 = persons[i];
             distanceEmployeeObject.employee2 = persons[j];
             cout << distanceEmployeeObject.distance<<endl;
+
             if (distanceEmployeeObject.distance<distance1){
+                
                 addEdge(distanceEmployeeObject.employee1, distanceEmployeeObject.employee2, adj);
             }
+   
             arrayOfDistances.push_back(distanceEmployeeObject);
             
         }
@@ -399,7 +402,7 @@ void task3() {
     cout << "Graph: "<<endl;
     printGraph(adj, 31);
     
-    cout << NumberOfconnectedComponents(31, adj)<<endl;;
+    cout << "Number of conected components: "<< NumberOfconnectedComponents(31, adj)<<endl;;
 }
 
 int main(int argc, const char * argv[]) {
