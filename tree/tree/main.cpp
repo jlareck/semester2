@@ -249,7 +249,7 @@ void task1() {
     
 }
 void demoNaryTree(){
-    cout << "WELCOME TO DEMO MODE" << endl;
+    cout << "WELCOME TO DEMO MODE N-ARY TREE" << endl;
     cout << "As you know tree is a hierarchical data structure with a root value and subtrees of children with a parent node, represented as a set of linked nodes" << endl;
     cout << "In this program element have to values: the first is key - unique identifier for each node, and second one is data - value that you want to put in node" <<endl;
     cout << "If you want to add element in tree you need to enter the path to it (order of keys)."<<endl;
@@ -299,7 +299,31 @@ void demoNaryTree(){
     printTreeInBrackets(root);
     
 }
-
+void demoBinaryTree(){
+    cout << "WELCOME TO DEMO MODE BINARY TREE" << endl;
+    cout << "In computer science, a binary tree is a tree data structure in which each node has at most two children, which are referred to as the left child and the right child." <<endl;
+    cout << "In this implementation binary tree is like binary serach tree. Elements adds to tree depending on key" << endl;
+    cout << "The first action that we will do is creating root. It will have key 10"<<endl;
+    BinaryTreeNode* root = nullptr;
+    root = insert(root, 10);
+    cout << "Next we can add some values. For example: 5, 15,3,2,11,17"<<endl;
+    root = insert(root, 5);
+    root = insert(root, 15);
+    
+    root = insert(root, 3);
+    root = insert(root, 2);
+    root = insert(root, 11);
+    root = insert(root, 17);
+    cout << "Let's see how tree look like now"<<endl;
+    printTreeInBrackets(root);
+    cout << "We can also build threaded tree to make inorder traverse easier"<<endl;
+    createThreaded(root);
+    cout << "Tree inorder: "<<endl;
+    inOrder(root);
+    
+    
+    
+}
 void interactiveMode() {
     int action;
     bool flag = true;
@@ -440,7 +464,7 @@ void interactiveMode() {
                             break;
                     }
                 }
-                
+                break;
             }
             case 2: {
                 BinaryTreeNode* root = nullptr;
@@ -458,7 +482,7 @@ void interactiveMode() {
                             int data;
                             cout<< "Enter data"<<endl;
                             cin >> data;
-                           root = insert(root, data);
+                            root = insert(root, data);
                             break;
                         case 2:{
                             createThreaded(root);
@@ -498,9 +522,32 @@ void interactiveMode() {
         }
     }
 }
+void chooseMode(){
+  
+    int action;
+    cout << "1 - Interactive mode" << endl;
+    cout << "2 - Demo mode n-ary tree" << endl;
+    cout << "3 - Demo mode binary tree" << endl;
+    cout << "Choose mode (enter number from 1 to 3): " << endl;
+    cin >> action;
+    switch (action) {
+        case 1:
+            interactiveMode();
+            break;
+        case 2:
+            demoNaryTree();
+            break;
+        case 3:
+            demoBinaryTree();
+            break;
+        default:
+            cout << "Reload program and choose correctly"<<endl;
+            break;
+    }
+}
 int main()
 {
-  //  interactiveMode();
-    demoNaryTree();
+    chooseMode();
+    
     return 0;
 }
