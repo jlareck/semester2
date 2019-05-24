@@ -164,7 +164,7 @@ int getHeight(Employee *root) {
     if (arr.size() == 0){
         return 1;
     }
-    return 1 + *max_element(arr.begin(), arr.end());
+  return 1 + *max_element(arr.begin(), arr.end());
 }
 Employee* BuildKaryTree(vector<Employee*>& arr, int k, Employee*& root, int h)
 {
@@ -341,7 +341,8 @@ void task4(){
     inorder(root);
     cout << "Find elements with  22 with precicion 1"<<endl;
     bstNode* newNode = search(root, 22, 1);
-    cout << newNode->data.distance <<endl;
+    if (newNode!=NULL)
+        cout << newNode->data.distance <<endl;
 }
 void addEdge(Employee* e1, Employee* e2, vector<Employee*> adj[])
 {
