@@ -294,6 +294,23 @@ void inorder(bstNode *root)
         inorder(root->right);
     }
 }
+bool inRange(int low, int high, int x)
+{
+    return  ((x-low) <= (high-low));
+}
+bstNode* search(bstNode* root, int key, int precision)
+{
+   
+    if (root == NULL || abs(key-root->data.distance)<precision)
+        return root;
+    
+   
+    if (root->data.distance < key)
+        return search(root->right, key, precision);
+    
+    
+    return search(root->left, key, precision);
+}
 void task4(){
     vector<Employee*> persons;
     Employee* employee;
@@ -322,6 +339,9 @@ void task4(){
     printBST(root);
     cout << "Printing in right order: "<<endl;
     inorder(root);
+    cout << "Find elements with  22 with precicion 1"<<endl;
+    bstNode* newNode = search(root, 22, 1);
+    cout << newNode->data.distance <<endl;
 }
 void addEdge(Employee* e1, Employee* e2, vector<Employee*> adj[])
 {
@@ -408,9 +428,9 @@ void task3() {
 int main(int argc, const char * argv[]) {
 
     srand(time(nullptr));
-  //  task1();
-    //task2();
-    task3();
-    //task4();
+   // task1();
+   // task2();
+  //  task3();
+    task4();
     return 0;
 }
