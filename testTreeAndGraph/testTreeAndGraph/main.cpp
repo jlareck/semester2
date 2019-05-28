@@ -8,8 +8,10 @@
 
 #include <iostream>
 #include <utility>
+#include <set>
 #include <cmath>
 #include <vector>
+#include <list>
 using namespace std;
 #define VARIANT 1
 #define SUBVARINT 3
@@ -27,6 +29,8 @@ struct Employee {
     double distance;
     int key;
     int height;
+    int dest;
+    double cost;
     vector<Employee*> childs;
 };
 struct DistanceEmployee{
@@ -290,7 +294,7 @@ void inorder(bstNode *root)
     if (root != NULL)
     {
         inorder(root->left);
-        cout << root->key<<endl;;
+        cout << root->key<< " "<<root->data.distance<<endl;;
         inorder(root->right);
     }
 }
@@ -339,15 +343,20 @@ void task4(){
     printBST(root);
     cout << "Printing in right order: "<<endl;
     inorder(root);
-    cout << "Find elements with  22 with precicion 1"<<endl;
+    cout << "Find element with distance 22 with precicion 1"<<endl;
     bstNode* newNode = search(root, 22, 1);
     if (newNode!=NULL)
         cout << newNode->data.distance <<endl;
 }
-void addEdge(Employee* e1, Employee* e2, vector<Employee*> adj[])
+void addEdge(Employee* e1, Employee* e2, double distance, vector<Employee*> adj[])
 {
+    e1->cost = distance;
+    e2->cost = distance;
+    e2->dest = e2->key;
+   e1->dest = e1->key;
     adj[e1->key].push_back(e2);
     adj[e2->key].push_back(e1);
+    
 }
 void DFSUtil(int v, bool visited[], vector<Employee*> adj[])
 {
@@ -359,6 +368,50 @@ void DFSUtil(int v, bool visited[], vector<Employee*> adj[])
             DFSUtil(i, visited, adj);
     }
 }
+void printGraph(vector<Employee*> adj[], int V)
+{
+    for (int i = 0; i < V; i++)
+    {
+        cout << "\n Adjacency list of vertex "
+        << i << "\n head ";
+        for (Employee* x : adj[i])
+            cout << "-> " << x->key;
+        printf("\n");
+    }
+}
+void dijkstra(vector<Employee*> g[], double dist[], int start) {
+    int n = 31;
+  
+    for(int u = 0; u<n; u++) {
+        dist[u] = 9999.0;
+
+    }
+
+    dist[start] = 0.0;
+
+
+    list<int> Q;
+    
+    for(int u = 0; u<n; u++) {
+        Q.push_back(u);
+    }
+    
+    while(!Q.empty()) {
+        list<int> :: iterator i;
+        i = min_element(Q.begin(), Q.end());
+        int u = *i;
+        Q.remove(u);
+
+        
+        for(auto it: g[u]) {
+            cout <<u<< " " <<it->cost << " "<< it->dest<<endl;
+            if((dist[u]+(it->cost)) < dist[it->dest]) {
+                dist[it->dest] = (dist[u]+(it->cost));
+            }
+        }
+    }
+}
+
 int NumberOfconnectedComponents(int V, vector<Employee*> adj[])
 {
 
@@ -377,17 +430,7 @@ int NumberOfconnectedComponents(int V, vector<Employee*> adj[])
     
     return count;
 }
-void printGraph(vector<Employee*> adj[], int V)
-{
-    for (int i = 0; i < V; i++)
-    {
-        cout << "\n Adjacency list of vertex "
-        << i << "\n head ";
-        for (Employee* x : adj[i])
-            cout << "-> " << x->key;
-        printf("\n");
-    }
-}
+
 void task3() {
     vector<Employee*> adj[50];
     vector<Employee*> persons;
@@ -404,26 +447,37 @@ void task3() {
     int distance1 = 20;
     for (int i = 1; i<31; i++)
     {
-        for (int j = 0; j <= i; j++) {
+        for (int j = 0; j < i; j++) {
             DistanceEmployee distanceEmployeeObject;
             distanceEmployeeObject.distance = distance(persons[i], persons[j]);
             distanceEmployeeObject.employee1 = persons[i];
             distanceEmployeeObject.employee2 = persons[j];
+            if(distanceEmployeeObject.distance == -0){
+                distanceEmployeeObject.distance  = 20.0;
+            }
             cout << distanceEmployeeObject.distance<<endl;
 
             if (distanceEmployeeObject.distance<distance1){
                 
-                addEdge(distanceEmployeeObject.employee1, distanceEmployeeObject.employee2, adj);
+                addEdge(distanceEmployeeObject.employee1, distanceEmployeeObject.employee2, distanceEmployeeObject.distance, adj);
             }
    
-            arrayOfDistances.push_back(distanceEmployeeObject);
+         
             
         }
     }
+    
     cout << "Graph: "<<endl;
     printGraph(adj, 31);
-    
+    double dist[31];
+
     cout << "Number of conected components: "<< NumberOfconnectedComponents(31, adj)<<endl;;
+    int start = 0;
+
+    dijkstra(adj, dist, start);
+    for(int i = 0; i<31; i++)
+        if(i != start)
+            cout<<start<<" to "<<i<<", Cost: "<<dist[i]<<endl;;
 }
 
 int main(int argc, const char * argv[]) {
@@ -431,7 +485,7 @@ int main(int argc, const char * argv[]) {
     srand(time(nullptr));
    // task1();
    // task2();
-  //  task3();
-    task4();
+    task3();
+  //  task4();
     return 0;
 }
