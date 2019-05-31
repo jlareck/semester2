@@ -211,9 +211,11 @@ void traversalHeight(Employee*& node){
     if (!node)
         return;
     node->height = getHeight(node);
+    cout<<node->height<<"(";
     for (int i = 0; i < node->childs.size(); i++){
         traversalHeight(node->childs[i]);
     }
+    cout<<")";
 }
 void printTreeInBrackets(Employee* node) {
     if (!node) {
@@ -227,6 +229,7 @@ void printTreeInBrackets(Employee* node) {
     cout<<")";
     
 }
+
 void task2() {
     Employee* root = randomEmployee();
    
@@ -246,10 +249,12 @@ void task2() {
     int h = 0;
     BuildKaryTree(persons, numberOfChilds, root, h);
     
-    traversalHeight(root);
+
     cout << "Tree: "<<endl;
     printTreeInBrackets(root);
-
+    cout << endl;
+    cout << "Heights of nodes"<<endl;
+    traversalHeight(root);
 }
 struct bstNode{
     bstNode* left;
@@ -404,7 +409,7 @@ void dijkstra(vector<Employee*> g[], double dist[], int start) {
 
         
         for(auto it: g[u]) {
-            cout <<u<< " " <<it->cost << " "<< it->dest<<endl;
+          //  cout <<u<< " " <<it->cost << " "<< it->dest<<endl;
             if((dist[u]+(it->cost)) < dist[it->dest]) {
                 dist[it->dest] = (dist[u]+(it->cost));
             }
@@ -439,7 +444,7 @@ void task3() {
     {
         employee = randomEmployee();
         employee->key = i;
-        printEmployee(employee);
+  //      printEmployee(employee);
         persons.push_back(employee);
     }
     sort(persons.begin(), persons.end(), comparator);
@@ -455,7 +460,7 @@ void task3() {
             if(distanceEmployeeObject.distance == -0){
                 distanceEmployeeObject.distance  = 20.0;
             }
-            cout << distanceEmployeeObject.distance<<endl;
+          //  cout << distanceEmployeeObject.distance<<endl;
 
             if (distanceEmployeeObject.distance<distance1){
                 
@@ -483,9 +488,9 @@ void task3() {
 int main(int argc, const char * argv[]) {
 
     srand(time(nullptr));
-   // task1();
-   // task2();
-    task3();
+  //  task1();
+    task2();
+   // task3();
   //  task4();
     return 0;
 }
