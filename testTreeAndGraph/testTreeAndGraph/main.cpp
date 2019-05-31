@@ -358,75 +358,31 @@ void addEdge(Employee* e1, Employee* e2, double distance, vector<Employee*> adj[
     e1->cost = distance;
     e2->cost = distance;
     e2->dest = e2->key;
-   e1->dest = e1->key;
+    e1->dest = e1->key;
     adj[e1->key].push_back(e2);
     adj[e2->key].push_back(e1);
     
 }
-void DFSUtil(int v, bool visited[], vector<Employee*> adj[])
+void DFSUtil(int index, bool visited[], vector<Employee*> adj[])
 {
 
-    visited[v] = true;
+    visited[index] = true;
     
-    for (int i = 0; i < adj[v].size(); i++){
+    for (int i = 0; i < adj[index].size(); i++){
         if (!visited[i])
             DFSUtil(i, visited, adj);
     }
 }
-void printGraph(vector<Employee*> adj[], int V)
+int NumberOfconnectedComponents(int numberOfVertices, vector<Employee*> adj[])
 {
-    for (int i = 0; i < V; i++)
-    {
-        cout << "\n Adjacency list of vertex "
-        << i << "\n head ";
-        for (Employee* x : adj[i])
-            cout << "-> " << x->key;
-        printf("\n");
-    }
-}
-void dijkstra(vector<Employee*> g[], double dist[], int start) {
-    int n = 31;
-  
-    for(int u = 0; u<n; u++) {
-        dist[u] = 9999.0;
-
-    }
-
-    dist[start] = 0.0;
-
-
-    list<int> Q;
     
-    for(int u = 0; u<n; u++) {
-        Q.push_back(u);
-    }
+    bool* visited = new bool[numberOfVertices];
     
-    while(!Q.empty()) {
-        list<int> :: iterator i;
-        i = min_element(Q.begin(), Q.end());
-        int u = *i;
-        Q.remove(u);
-
-        
-        for(auto it: g[u]) {
-          //  cout <<u<< " " <<it->cost << " "<< it->dest<<endl;
-            if((dist[u]+(it->cost)) < dist[it->dest]) {
-                dist[it->dest] = (dist[u]+(it->cost));
-            }
-        }
-    }
-}
-
-int NumberOfconnectedComponents(int V, vector<Employee*> adj[])
-{
-
-    bool* visited = new bool[V];
-
     int count = 0;
-    for (int i = 0; i < V; i++)
+    for (int i = 0; i < numberOfVertices; i++)
         visited[i] = false;
     
-    for (int i = 0; i < V; i++) {
+    for (int i = 0; i < numberOfVertices; i++) {
         if (visited[i] == false) {
             DFSUtil(i, visited, adj);
             count += 1;
@@ -435,6 +391,48 @@ int NumberOfconnectedComponents(int V, vector<Employee*> adj[])
     
     return count;
 }
+void printGraph(vector<Employee*> adj[], int numberOfVertices)
+{
+    for (int i = 0; i < numberOfVertices; i++)
+    {
+        cout << "\n Adjacency list of vertex "
+        << i << "\n head ";
+        for (Employee* j : adj[i])
+            cout << "-> " << j->key;
+        printf("\n");
+    }
+}
+void dijkstra(vector<Employee*> adj[], double dist[], int start) {
+    int size = 31;
+  
+    for(int i = 0; i < size; i++) {
+        dist[i] = 9999.0;
+    }
+
+    dist[start] = 0.0;
+    list<int> queueOfVertices;
+    
+    for(int i = 0; i<size; i++) {
+        queueOfVertices.push_back(i);
+    }
+    
+    while(!queueOfVertices.empty()) {
+        list<int> :: iterator i;
+        i = min_element(queueOfVertices.begin(), queueOfVertices.end());
+        int u = *i;
+        queueOfVertices.remove(u);
+
+        
+        for(auto it: adj[u]) {
+          //  cout <<u<< " " <<it->cost << " "<< it->dest<<endl;
+            if((dist[u]+(it->cost)) < dist[it->dest]) {
+                dist[it->dest] = (dist[u]+(it->cost));
+            }
+        }
+    }
+}
+
+
 
 void task3() {
     vector<Employee*> adj[50];
