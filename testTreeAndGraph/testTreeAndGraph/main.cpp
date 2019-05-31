@@ -14,7 +14,7 @@
 #include <list>
 using namespace std;
 #define VARIANT 1
-#define SUBVARINT 3
+
 struct Knowledge {
     int max;
     int min;
@@ -152,7 +152,7 @@ void task1() {
         printEmployee(arrayOfDistances[i].employee1);
         printEmployee(arrayOfDistances[i].employee2);
         cout<< "Distance: " << arrayOfDistances[i].distance << endl;
-        cout << i<<endl;
+        cout << i <<endl;
     }
     
 }
@@ -412,7 +412,7 @@ void dijkstra(vector<Employee*> adj[], double dist[], int start) {
     dist[start] = 0.0;
     list<int> queueOfVertices;
     
-    for(int i = 0; i<size; i++) {
+    for(int i = 0; i < size; i++) {
         queueOfVertices.push_back(i);
     }
     
@@ -464,9 +464,6 @@ void task3() {
                 
                 addEdge(distanceEmployeeObject.employee1, distanceEmployeeObject.employee2, distanceEmployeeObject.distance, adj);
             }
-   
-         
-            
         }
     }
     
