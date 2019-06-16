@@ -11,6 +11,7 @@
 #include <utility>
 #include <algorithm>
 #include <vector>
+#include <stack>
 using namespace std;
 #define MAX 100
 typedef  pair<int, int> iPair;
@@ -52,7 +53,7 @@ void DFSUtil(int v, bool visited[], list<Node> graph[] )
 {
 
     visited[v] = true;
-  //  cout << v << " ";    // I am using this function in finding min spanning tree that's why I commented this line
+
     
     for (auto x : graph[v])
         if (!visited[x.dest])
@@ -71,20 +72,20 @@ void dfsSpanningTree(int v, int n, bool visited[], list<Node> graph[]) {
     visited[v] = true;
     for (int i = 0; i < n; i++) {
         if (!visited[i] && findElement(v, i, graph)) {
-            printf("(%d %d)\n", v, i);
+           // printf("(%d %d)\n", v, i);
+            cout << "("<< v << " " << i << ")" <<endl;
             dfsSpanningTree(i, n, visited, graph);
         }
     }
 }
 void DFS(int v, list<Node>graph[])
 {
-    // Mark all the vertices as not visited
+
     bool *visited = new bool[MAX];
     for (int i = 0; i < MAX; i++)
         visited[i] = false;
     
-    // Call the recursive helper function
-    // to print DFS traversal
+
     DFSUtil(v, visited, graph);
 }
 void dijkstra(list<Node> adj[], double dist[], int start, int size) {
@@ -109,7 +110,7 @@ void dijkstra(list<Node> adj[], double dist[], int start, int size) {
         
         
         for(auto it: adj[u]) {
-            //  cout <<u<< " " <<it->cost << " "<< it->dest<<endl;
+    
             if((dist[u]+(it.cost)) < dist[it.dest]) {
                 dist[it.dest] = (dist[u]+(it.cost));
             }
@@ -123,11 +124,9 @@ bool isConnected(int size, list<Node> graph[])
     bool *visited = new bool[size];
     for(int v = 0; v < size; v++)
         visited[v] = false;
-    // Find all reachable vertices from first vertex
+
     DFSUtil(0, visited, graph);
-    
-    // If set of reachable vertices includes all,
-    // return true.
+
     for (int i=1; i<size; i++)
         if (visited[i] == false)
             return false;
@@ -142,32 +141,27 @@ void deleteFromVector(list<Node> vec[], int u, int v) {
     }
     vec[u].erase(i);
 }
-// This function assumes that edge (u, v)
-// exists in graph or not,
+
 void reverseDeleteMST(list<Node> adj[], int size)
 {
-    // Sort edges in increasing order on basis of cost
+   
     sort(edges.begin(), edges.end());
     
-    int mst_wt = 0;  // Initialize weight of MST
-    
+    int mst_wt = 0;
     cout << "Edges in MST\n";
     
-    // Iterate through all sorted edges in
-    // decreasing order of weights
+
     for (int i = edges.size()-1; i>=0; i--)
     {
         Node u, v;
         u.dest = edges[i].second.first;
         v.dest = edges[i].second.second;
         
-        // Remove edge from undirected graph
+
         deleteFromVector(adj, u.dest, v.dest);
         deleteFromVector(adj, v.dest, u.dest);
         
-        // Adding the edge back if removing it
-        // causes disconnection. In this case this
-        // edge becomes part of MST.
+    
         if (isConnected(size, adj) == false)
         {
             adj[u.dest].push_back(v);
@@ -193,12 +187,47 @@ void connectedComponents(list<Node> graph[], int n)
     {
         if (visited[v] == false)
         {
-            // print all reachable vertices
-            // from v
             DFSUtil(v, visited, graph);
             
             cout << "\n";
         }
+    }
+}
+void topologicalSortUtil(int v, bool visited[], stack<int> &Stack, list<Node> graph[])
+{
+
+    visited[v] = true;
+    
+
+    list<Node>::iterator i;
+    for (i = graph[v].begin(); i != graph[v].end(); ++i)
+        if (!visited[(*i).dest])
+            topologicalSortUtil((*i).dest, visited, Stack, graph);
+    
+
+    Stack.push(v);
+}
+
+
+void topologicalSort(int size, list<Node> graph[])
+{
+    stack<int> Stack;
+    
+
+    bool *visited = new bool[size];
+    for (int i = 0; i < size; i++)
+        visited[i] = false;
+    
+
+    for (int i = 0; i < size; i++)
+        if (visited[i] == false)
+            topologicalSortUtil(i, visited, Stack, graph);
+    
+    
+    while (Stack.empty() == false)
+    {
+        cout << Stack.top() << " ";
+        Stack.pop();
     }
 }
 void task1(){
@@ -249,14 +278,16 @@ void task1(){
 void task2(){
     list<Node> graph[MAX];
     bool flag = false;
-    addEdge(graph, 0, 1, 5, flag);
-    addEdge(graph, 0, 2, 5, flag);
-    addEdge(graph, 1, 2, 5, flag);
-    addEdge(graph, 2, 0, 5, flag);
+    int size = 6;
+    addEdge(graph, 5, 2, 5, flag);
+    addEdge(graph, 5, 0, 5, flag);
+    addEdge(graph, 4, 0, 5, flag);
+    addEdge(graph, 4, 1, 5, flag);
     addEdge(graph, 2, 3, 5, flag);
-    addEdge(graph, 3, 3, 5, flag);
-    DFS(2, graph);
-    
+    addEdge(graph, 3, 1, 5, flag);
+    //DFS(2, graph);
+    cout << "Topological sort"<<endl;
+    topologicalSort(size, graph);
 }
 int main(int argc, const char * argv[]) {
     
