@@ -12,10 +12,11 @@
 #include <algorithm>
 #include <vector>
 #include <stack>
+#include "AdjencyMatrix.hpp"
 using namespace std;
 #define MAX 100
 typedef  pair<int, int> iPair;
-  vector< pair<int, iPair> > edges;
+vector< pair<int, iPair> > edges;
 struct Node{
 
     int dest;
@@ -53,7 +54,7 @@ void DFSUtil(int v, bool visited[], list<Node> graph[] )
 {
 
     visited[v] = true;
-
+    cout << v << " ";
     
     for (auto x : graph[v])
         if (!visited[x.dest])
@@ -275,7 +276,7 @@ void task1(){
     
     reverseDeleteMST(graph, size);
 }
-void task2(){
+void task2() {
     list<Node> graph[MAX];
     bool flag = false;
     int size = 6;
@@ -289,10 +290,52 @@ void task2(){
     cout << "Topological sort"<<endl;
     topologicalSort(size, graph);
 }
+void task3() {
+    AdjencyMatrix graph = AdjencyMatrix(9);
+    graph.flag = false;
+    graph.addEdge(0, 1, 4);
+    graph.addEdge(0, 7, 8 );
+    graph.addEdge(1, 2, 8 );
+    graph.addEdge(1, 7, 11);
+    graph.addEdge(2, 3, 7);
+    graph.addEdge(2, 8, 2);
+    graph.addEdge(2, 5, 4);
+    graph.addEdge(3, 4, 9);
+    graph.addEdge(3, 5, 14);
+    graph.addEdge(4, 5, 10);
+    graph.addEdge(5, 6, 2);
+    graph.addEdge(6, 7, 1);
+    graph.addEdge(6, 8, 6);
+    graph.addEdge(7, 8, 7);
+    graph.printMatrix();
+    graph.connectedComponents(true);
+    graph.dijkstra(0);
+    cout << "Spanning tree"<<endl;
+    graph.dfsSpanningTree(0);
+    graph.minimumSpanningTree(false);
+}
+void task4(){
+    
+ 
+
+    AdjencyMatrix graph = AdjencyMatrix(6);
+    graph.flag = true;
+    graph.addEdge(5, 2, 5);
+    graph.addEdge(5, 0, 5);
+    graph.addEdge(4, 0, 5);
+    graph.addEdge(4, 1, 5);
+    graph.addEdge(2, 3, 5);
+    graph.addEdge(3, 1, 5);
+ 
+    cout << "Topological sort"<<endl;
+    graph.topologicalSort();
+}
 int main(int argc, const char * argv[]) {
     
-    srand(time(nullptr));
-    task1();
+    
+    task2();
+    cout << endl;
+    task4();
     return 0;
 }
 
